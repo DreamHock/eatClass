@@ -5,7 +5,6 @@ import { useState } from "react";
 
 const Restaurant = (props) => {
     const [restaurant, setRestaurant] = useState(props.restaurant);
-    // const [services, setServices] = useState(restaurant[0].services);
 
     const handleSubmit = (e) => {
         e.preventDefault();

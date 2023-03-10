@@ -17,14 +17,12 @@ class ServiceFactory extends Factory
      */
     public function definition(): array
     {
-        $numbers = [15, 30, 45, 60];
-        $randomNumber = $numbers[array_rand($numbers)];
         return [
             'restaurant_id' => Restaurant::all()->random(),
             'service' => fake()->name(),
             'date' => fake()->dateTime(),
-            'duration' => rand(60, 180),
-            'interval' => $randomNumber
+            'duration' => fake()->randomElement([60, 120, 180]),
+            'interval' => fake()->randomElement([15, 30, 60])
             // $table->dateTime('date');
             // $table->float('duration',2,2);
             // $table->float('interval');

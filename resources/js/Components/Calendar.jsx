@@ -1,97 +1,170 @@
-// import React, { useState } from "react";
-// import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
-// import {
-//     format,
-//     startOfWeek,
-//     addDays,
-//     startOfMonth,
-//     endOfMonth,
-//     endOfWeek,
-//     isSameMonth,
-//     isSameDay,
-// } from "date-fns";
+import {
+    addDays,
+    addMonths,
+    addYears,
+    endOfMonth,
+    endOfWeek,
+    format,
+    getDaysInMonth,
+    getMonth,
+    getWeekOfMonth,
+    getYear,
+    isSameDay,
+    isSameMonth,
+    startOfMonth,
+    startOfWeek,
+} from "date-fns";
+import React, { useState } from "react";
+import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
+import "../../css/calendar.css";
 
-// const Calendar = () => {
-//     const [selectedDate, setSelectedDate] = useState(new Date());
-//     const [activeDate, setActiveDate] = useState(new Date());
+const Calendar = ({ services }) => {
+    const [selectedDate, setSelectedDate] = useState(new Date());
+    const [activeDate, setActiveDate] = useState(new Date());
 
-//     const getWeekDaysNames = () => {
-//         const weekStartDate = startOfWeek(activeDate, { weekStartsOn: 1 });
-//         const weekDays = [];
-//         for (let day = 0; day < 7; day++) {
-//             weekDays.push(
-//                 <div className="day weekNames text-[#9e9e9e]">
-//                     {format(addDays(weekStartDate, day), "EEEEEE")}
-//                 </div>
-//             );
-//         }
-//         return (
-//             <div className="weekContainer grid grid-cols-7 grid ">
-//                 {weekDays}
-//             </div>
-//         );
-//     };
-//     const generateDatesForCurrentWeek = (date, selectedDate, activeDate) => {
-//         let currentDate = date;
-//         const week = [];
-//         for (let day = 0; day < 7; day++) {
-//             const cloneDate = currentDate;
-//             week.push(
-//                 <div
-//                     className={`day ${
-//                         isSameMonth(currentDate, activeDate)
-//                             ? ""
-//                             : "inactiveDay"
-//                     } ${
-//                         isSameDay(currentDate, selectedDate)
-//                             ? "selectedDay"
-//                             : ""
-//                     }
-//               ${isSameDay(currentDate, new Date()) ? "today" : ""}`}
-//                     onClick={() => {
-//                         setSelectedDate(cloneDate);
-//                     }}
-//                 >
-//                     {format(currentDate, "d")}
-//                 </div>
-//             );
-//             currentDate = addDays(currentDate, 1);
-//         }
-//         return <>{week}</>;
-//     };
+    const getHeader = () => {
+        return (
+            <div className="header">
+                <div
+                    className="todayButton"
+                    onClick={() => {
+                        setActiveDate(new Date());
+                    }}
+                >
+                    Today
+                </div>
+                <AiOutlineLeft
+                    className="navIcon"
+                    onClick={() => setActiveDate(addMonths(activeDate, -1))}
+                />
+                <AiOutlineRight
+                    className="navIcon"
+                    onClick={() => setActiveDate(addMonths(activeDate, 1))}
+                />
+                <h2 className="currentMonth">
+                    {format(activeDate, "MMMM yyyy")}
+                </h2>
+            </div>
+        );
+    };
+    const getWeekDaysNames = () => {
+        const weekStartDate = startOfWeek(activeDate);
+        const weekDays = [];
+        for (let day = 1; day <= 7; day++) {
+            weekDays.push(
+                <div className="day weekNames" key={day}>
+                    {format(addDays(weekStartDate, day), "E")}
+                </div>
+            );
+        }
+        return <div className="weekContainer">{weekDays}</div>;
+    };
 
-//     return (
-//         <section>
-//             {/* getHeader */}
-//             <div className="header flex items-center">
-//                 <div className="todayButton">Today</div>
-//                 <AiOutlineLeft className="navIcon" />
-//                 <AiOutlineRight className="navIcon" />{" "}
-//                 <h2 className="currentMonth ml-6 border border-black">
-//                     {format(activeDate, "MMMM yyyy")}
-//                 </h2>
-//             </div>
-//             {/* {getWeekDaysNames} */}
-//             {getWeekDaysNames()}
-//             {/* <div className="weekContainer">{weekDays}</div> */}
-//             {/* {getDates} */}
-//         </section>
-//     );
-// };
+    const generateDatesForCurrentWeek = (date, selectedDate, activeDate) => {
+        let currentDate = date;
+        const week = [];
+        for (let day = 0; day < 7; day++) {
+            const cloneDate = currentDate;
+            week.push(
+                <div
+                    key={day}
+                    className={`day cursor-pointer hover:bg-orange-500 text-slate-50 relative
+                    ${
+                        services.find((service) =>
+                            isSameDay(new Date(service.date), currentDate)
+                        )
+                            ? " after:content-[''] after:absolute after:w-2 after:h-2 after:rounded-full after:bg-orange-500 after:hover:bg-sky-500 after:top-0 after:left-0"
+                            : ""
+                    }
+                    ${
+                        isSameMonth(currentDate, activeDate) &&
+                        !isSameDay(currentDate, new Date()) &&
+                        !isSameDay(selectedDate, currentDate)
+                            ? " bg-slate-500 "
+                            : "  "
+                    } 
+                    ${
+                        !isSameMonth(currentDate, activeDate) &&
+                        !isSameDay(selectedDate, currentDate) &&
+                        !isSameDay(currentDate, new Date())
+                            ? " bg-slate-300 "
+                            : "  "
+                    } 
+                    ${
+                        isSameDay(selectedDate, currentDate)
+                            ? "bg-orange-500"
+                            : ""
+                    }
+                    ${
+                        isSameDay(currentDate, new Date()) &&
+                        !isSameDay(selectedDate, currentDate)
+                            ? "bg-sky-500"
+                            : ""
+                    }
+                    
+                    `}
+                    onClick={() => {
+                        setSelectedDate(cloneDate);
+                        console.log(cloneDate);
+                    }}
+                >
+                    {format(currentDate, "d")}
+                </div>
+            );
+            currentDate = addDays(currentDate, 1);
+        }
+        return <>{week}</>;
+    };
 
-// export default Calendar;
-import { Calendar as Cal } from "react-calendar";
-import { useState } from "react";
-import '../../css/calendar.css'
+    const getDates = () => {
+        const startOfTheSelectedMonth = startOfMonth(activeDate);
+        const endOfTheSelectedMonth = endOfMonth(activeDate);
+        const startDate = startOfWeek(startOfTheSelectedMonth);
+        const endDate = endOfWeek(endOfTheSelectedMonth);
 
-const Calendar = () => {
-    const [time, setTime] = useState(new Date());
+        let currentDate = startDate;
+
+        const allWeeks = [];
+
+        while (currentDate <= endDate) {
+            allWeeks.push(
+                generateDatesForCurrentWeek(
+                    currentDate,
+                    selectedDate,
+                    activeDate
+                )
+            );
+            currentDate = addDays(currentDate, 7);
+        }
+
+        return <div className="weekContainer">{allWeeks}</div>;
+    };
+    // const getDates = () => {
+    //     const monthStartDate = startOfMonth(activeDate);
+    //     const monthEndDate = endOfMonth(activeDate);
+    //     const monthDays = [];
+    //     for (let day = 0; day < format(monthEndDate, "d"); day++) {
+    //         monthDays.push(
+    //             <div
+    //                 className={`day cursor-pointer bg-slate-200 hover:bg-slate-300 active:bg-slate-400 select-none`}
+    //                 onClick={() => {
+    //                     console.log(addDays(monthStartDate, day));
+    //                 }}
+    //                 key={day}
+    //             >
+    //                 {format(addDays(monthStartDate, day), "d")}
+    //             </div>
+    //         );
+    //     }
+    //     return <div className="day-container">{monthDays}</div>;
+    // };
 
     return (
-        <>
-            <div>Calendar</div>
-            <Cal className='' onChange={setTime} value={time} />
-        </>
+        <section>
+            {getHeader()}
+            {getWeekDaysNames()}
+            {getDates()}
+        </section>
     );
 };
 

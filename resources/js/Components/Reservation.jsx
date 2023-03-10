@@ -1,32 +1,25 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Calendar from "./Calendar";
-
+import Services from "./Services";
 
 const Reservation = ({ restaurant }) => {
-    const [services, setServices] = useState(restaurant[0].services);
-    const [date, setDate] = useState(new Date());
+    const [services] = useState(restaurant[0].services);
+    const [service, setService] = useState("");
+    const [timeService, setTimeService] = useState(null);
+
+    useEffect(() => {
+        console.log(service);
+        services
+    }, [service]);
 
     return (
-        <form action="" className="p-4 border-[2px] shadow-lg w-[400px]">
-            <Calendar />
-            <select
-                name=""
-                id="services"
-                className="outline-none border-black"
-                defaultValue="services"
-            >
-                <option value="services" disabled>
-                    Services
-                </option>
-                {services.map((service) => {
-                    return (
-                        <option key={service.id} value={service.id}>
-                            {service.service}
-                        </option>
-                    );
-                })}
-            </select>
-        </form>
+        <div
+            action=""
+            className="p-4 border-[2px] shadow-lg w-[400px] flex flex-col font-bold rounded"
+        >
+            <Calendar services={services}/>
+            <Services setService={setService} services={services} />
+        </div>
     );
 };
 
