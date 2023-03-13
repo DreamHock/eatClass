@@ -3,6 +3,7 @@
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RestaurantController;
+use App\Http\Controllers\ServiceController;
 use App\Models\Category;
 use App\Models\Restaurant;
 use Illuminate\Foundation\Application;
@@ -42,4 +43,5 @@ use Inertia\Inertia;
 // require __DIR__.'/auth.php';
 
 Route::get('/', [CategoryController::class, 'categories']);
+Route::resource('services', ServiceController::class);
 Route::resource('restaurants', RestaurantController::class);

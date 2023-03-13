@@ -14,13 +14,14 @@ const Services = ({ setService, services }) => {
                 <option value="services" disabled>
                     Services
                 </option>
-                {services.map((service) => {
-                    return (
-                        <option key={service.id} value={service.id}>
-                            {service.service}
-                        </option>
-                    );
-                })}
+                {services.length !== 0 &&
+                    services.map((service) => {
+                        return (
+                            <option key={service.id} value={service.id}>
+                                {service.service}
+                            </option>
+                        );
+                    })}
             </select>
         </>
     );
