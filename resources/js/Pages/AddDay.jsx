@@ -2,7 +2,17 @@ import { useState } from "react";
 
 const AddDay = () => {
     const [day, setDay] = useState("day");
-    const [length, setLength] = useState(1);
+    const [services, setServices] = useState([{ id: 1, service: "" }]);
+
+    const addService = (service, ser) => {
+        if(service && ser.id === services.length) {
+            const newService = {
+                id: services[services.length - 1].id + 1,
+                service: "",
+            };
+            setServices([...services, newService]);
+        }
+    };
 
     return (
         <form
@@ -28,13 +38,12 @@ const AddDay = () => {
                 <option value="sunday">Sunday</option>
             </select>
             <div>sevices:</div>
-            {Array.from({ length: length }).map((_, index) => {
+            {services.map((ser) => {
                 return (
                     <ServiceInput
-                        key={index}
-                        index={index}
-                        length={length}
-                        setLength={setLength}
+                        ser={ser}
+                        key={ser.id}
+                        addService={addService}
                     />
                 );
             })}
@@ -51,19 +60,14 @@ const AddDay = () => {
 
 export default AddDay;
 
-const ServiceInput = ({ setLength, length, index }) => {
+const ServiceInput = ({ ser, addService }) => {
     const [inputActive, setInputActive] = useState(false);
     const [service, setService] = useState("");
-    const [isLast, setIsLast] = useState(index + 1 === length);
 
     const handleEnterClick = (e) => {
         service && setInputActive(false);
     };
 
-    const handleNewInput = () => {
-        isLast && setLength(length + 1);
-        setIsLast(false);
-    };
     return (
         <div className="mb-2">
             {inputActive ? (
@@ -71,10 +75,7 @@ const ServiceInput = ({ setLength, length, index }) => {
                     onChange={(e) => {
                         setService(e.target.value);
                     }}
-                    onKeyUp={(e) =>
-                        e.key === "Enter" &&
-                        (handleEnterClick(e), handleNewInput())
-                    }
+                    onKeyUp={(e) => e.key === "Enter" && (handleEnterClick(e), addService(service, ser))}
                     value={service}
                     autoFocus
                     onBlur={() => {
