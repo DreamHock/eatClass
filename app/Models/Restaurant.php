@@ -23,4 +23,9 @@ class Restaurant extends Model
     {
         return $this->hasMany(Service::class);
     }
+
+    function DefaultServices()
+    {
+        return $this->hasMany(DefaultService::class);
+    }
 }

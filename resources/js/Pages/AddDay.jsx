@@ -1,11 +1,16 @@
 import { useState } from "react";
 
-const Service = () => {
+const AddDay = () => {
     const [day, setDay] = useState("day");
     const [length, setLength] = useState(1);
 
     return (
-        <div className="shadow-md p-4 w-52 flex flex-col">
+        <form
+            onSubmit={(e) => {
+                e.preventDefault();
+            }}
+            className="shadow-md p-4 w-52 flex flex-col"
+        >
             <select
                 className="p-1 h-8 rounded"
                 onChange={(e) => setDay(e.target.value)}
@@ -33,11 +38,18 @@ const Service = () => {
                     />
                 );
             })}
-        </div>
+
+            <button
+                type="button"
+                className="focus:outline-none text-white bg-green-500 hover:bg-green-600 font-medium rounded text-sm px-5 py-2.5"
+            >
+                Add day
+            </button>
+        </form>
     );
 };
 
-export default Service;
+export default AddDay;
 
 const ServiceInput = ({ setLength, length, index }) => {
     const [inputActive, setInputActive] = useState(false);
@@ -50,7 +62,7 @@ const ServiceInput = ({ setLength, length, index }) => {
 
     const handleNewInput = () => {
         isLast && setLength(length + 1);
-        setIsLast(false)
+        setIsLast(false);
     };
     return (
         <div className="mb-2">
@@ -59,7 +71,10 @@ const ServiceInput = ({ setLength, length, index }) => {
                     onChange={(e) => {
                         setService(e.target.value);
                     }}
-                    onKeyUp={(e) => e.key === 'Enter' && (handleEnterClick(e), handleNewInput())}
+                    onKeyUp={(e) =>
+                        e.key === "Enter" &&
+                        (handleEnterClick(e), handleNewInput())
+                    }
                     value={service}
                     autoFocus
                     onBlur={() => {

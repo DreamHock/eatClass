@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Service;
+use App\Models\DefaultService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
-class ServiceController extends Controller
+class DefaultServiceController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -21,7 +21,8 @@ class ServiceController extends Controller
      */
     public function create()
     {
-        
+        $defaultServices = DefaultService::all();
+        return Inertia::render('AddWeek', ['defaultServices' => $defaultServices]);
     }
 
     /**
@@ -35,7 +36,7 @@ class ServiceController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Service $service)
+    public function show(DefaultService $defaultService)
     {
         //
     }
@@ -43,7 +44,7 @@ class ServiceController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Service $service)
+    public function edit(DefaultService $defaultService)
     {
         //
     }
@@ -51,7 +52,7 @@ class ServiceController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Service $service)
+    public function update(Request $request, DefaultService $defaultService)
     {
         //
     }
@@ -59,7 +60,7 @@ class ServiceController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Service $service)
+    public function destroy(DefaultService $defaultService)
     {
         //
     }
