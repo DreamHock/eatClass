@@ -4,14 +4,24 @@ const AddDay = () => {
     const [day, setDay] = useState("day");
     const [services, setServices] = useState([{ id: 1, service: "" }]);
 
-    const addService = (service, ser) => {
-        if(service && ser.id === services.length) {
+    const addService = (service, index) => {
+        if (service && index + 1 === services.length) {
             const newService = {
                 id: services[services.length - 1].id + 1,
                 service: "",
             };
             setServices([...services, newService]);
         }
+    };
+
+    const deleteService = (id) => {
+        services.length > 1
+            ? setServices(
+                  services.filter((service) => {
+                      return service.id != id;
+                  })
+              )
+            : null;
     };
 
     return (
@@ -38,12 +48,14 @@ const AddDay = () => {
                 <option value="sunday">Sunday</option>
             </select>
             <div>sevices:</div>
-            {services.map((ser) => {
+            {services.map((ser, index) => {
                 return (
                     <ServiceInput
+                        index={index}
                         ser={ser}
                         key={ser.id}
                         addService={addService}
+                        deleteService={deleteService}
                     />
                 );
             })}
@@ -60,7 +72,7 @@ const AddDay = () => {
 
 export default AddDay;
 
-const ServiceInput = ({ ser, addService }) => {
+const ServiceInput = ({ ser, addService, deleteService, index }) => {
     const [inputActive, setInputActive] = useState(false);
     const [service, setService] = useState("");
 
@@ -69,13 +81,16 @@ const ServiceInput = ({ ser, addService }) => {
     };
 
     return (
-        <div className="mb-2">
+        <div className="mb-2 flex relative">
             {inputActive ? (
                 <input
                     onChange={(e) => {
                         setService(e.target.value);
                     }}
-                    onKeyUp={(e) => e.key === "Enter" && (handleEnterClick(e), addService(service, ser))}
+                    onKeyUp={(e) =>
+                        e.key === "Enter" &&
+                        (handleEnterClick(e), addService(service, index))
+                    }
                     value={service}
                     autoFocus
                     onBlur={() => {
@@ -84,20 +99,28 @@ const ServiceInput = ({ ser, addService }) => {
                     // onFocus={}
                     type="text"
                     placeholder="service"
-                    className="border border-slate-900 rounded h-8 p-1 flex justify-end px-1 items-center shadow-sm "
+                    className="border border-slate-900 rounded h-8 p-1 flex justify-end items-center shadow-sm w-full"
                 />
             ) : (
                 <div
                     onClick={() => {
                         setInputActive(true);
                     }}
-                    className={`border border-slate-900 rounded h-8 shadow-sm p-1 flex items-center overflow-hidden ${
+                    className={`border border-slate-900 rounded h-8 shadow-sm p-1 flex items-center overflow-hidden w-full ${
                         !service && "text-slate-400 text-2xl justify-end px-1"
                     }`}
                 >
                     {!service ? <div className="select-none">+</div> : service}
                 </div>
             )}
+            <div
+                onClick={() => {
+                    deleteService(ser.id);
+                }}
+                className="flex justify-center items-center absolute right-[-10px] top-1 select-none text-red-600 font-extrabold"
+            >
+                x
+            </div>
         </div>
     );
 };
