@@ -1,7 +1,7 @@
 import { router } from "@inertiajs/react";
 import { useState } from "react";
 
-const AddDay = () => {
+const AddDay = ({ errors }) => {
     const [day, setDay] = useState("day");
     const [services, setServices] = useState([{ id: 1, service: "" }]);
 
@@ -18,7 +18,7 @@ const AddDay = () => {
             if (s.id === id) {
                 s.service = service;
             }
-            return s
+            return s;
         });
         setServices(desiredService);
     };
@@ -41,7 +41,6 @@ const AddDay = () => {
             services,
         });
     }
-
     return (
         <form
             onSubmit={(e) => {

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\DefaultService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 
@@ -51,7 +52,20 @@ class DefaultServiceController extends Controller
                 'services.*.service' => 'the service must be a string'
             ]
         );
-        return dd($request->all());
+
+        $services = $validator['services'];
+
+        foreach ($services as $service) {
+            $ds = new DefaultService;
+            $ds->create([
+                'service' => $service['service'],
+                'restaurant_id' => $validator['idRestaurant'],
+                'weekDayName' => $validator['day']
+            ]);
+        }
+
+
+        return dd($validator);
     }
 
     /**

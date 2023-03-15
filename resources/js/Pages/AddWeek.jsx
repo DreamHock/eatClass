@@ -14,7 +14,7 @@ const AddWeek = () => {
             <div className=" flex flex-col items-center">
                 <h2 className="font-bold">Default Week</h2>
                 <div className="flex gap-2">
-                    <AddDay />
+                    <AddDay errors={errors}/>
                 </div>
                 <button onClick={() => setClicked(!clicked)}>click</button>
             </div>
