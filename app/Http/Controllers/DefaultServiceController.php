@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\DefaultService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 
 class DefaultServiceController extends Controller
@@ -30,7 +31,28 @@ class DefaultServiceController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // $validator = Validator::make($request->all(), [
+        //     'idRestaurant' => 'require|string',
+        //     'day' => 'required|string',
+        //     'services.*.id' => 'require|integer',
+        //     'services.*.service' => 'require|string',
+
+        // ]);
+        $validator = $request->validate(
+            [
+                'idRestaurant' => 'required|integer',
+                'day' => 'required|in:monday, tuesday, wednesday, thursday, friday, saturday, sunday',
+                'services.*.id' => 'required|integer',
+                'services.*.service' => 'required|string',
+
+            ],
+            [
+                'day' => 'the day must be a valid week day',
+                'services.*.service' => 'the service must be a string'
+            ]
+
+        );
+        return dd($request->all());
     }
 
     /**
