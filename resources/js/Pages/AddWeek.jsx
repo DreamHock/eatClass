@@ -1,9 +1,14 @@
 import Layout from "@/Layouts/Layout";
-import { useState } from "react";
-import AddDay from "./AddDay";
+import { usePage } from "@inertiajs/react";
+import { useState, useEffect } from "react";
+import AddDay from "../Components/AddDay";
 
-const AddWeek = (props) => {
-    console.log(props.defaultServices)
+const AddWeek = () => {
+    const [clicked, setClicked] = useState(false);
+    const {errors} = usePage().props
+    useEffect(() => {
+        console.log(errors);
+    }, [clicked]);
     return (
         <Layout>
             <div className=" flex flex-col items-center">
@@ -11,6 +16,7 @@ const AddWeek = (props) => {
                 <div className="flex gap-2">
                     <AddDay />
                 </div>
+                <button onClick={() => setClicked(!clicked)}>click</button>
             </div>
         </Layout>
     );

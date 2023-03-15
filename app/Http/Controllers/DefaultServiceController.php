@@ -50,7 +50,6 @@ class DefaultServiceController extends Controller
                 'day' => 'the day must be a valid week day',
                 'services.*.service' => 'the service must be a string'
             ]
-
         );
         return dd($request->all());
     }
