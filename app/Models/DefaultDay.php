@@ -9,6 +9,7 @@ class DefaultDay extends Model
 {
     use HasFactory;
     protected $fillable = [
+        'id',
         'dayName',
         'restaurant_id',
     ];

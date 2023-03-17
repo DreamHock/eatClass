@@ -37,11 +37,12 @@ class DefaultDayController extends Controller
             [
                 'restaurant_id' => 'required|integer',
                 'day' => 'required|in:monday,tuesday,wednesday,thursday,friday,saturday,sunday',
+                'services.*' => 'required|string',
 
             ],
             [
                 'day' => 'the day must be a valid week day',
-                'restaurant_id' => 'the idRestaurant must be an integer'
+                'services.*' => 'the service must be a valid service'
             ]
         );
 
@@ -76,20 +77,29 @@ class DefaultDayController extends Controller
      */
     public function update(Request $request, DefaultDay $defaultDay)
     {
-        $defaultDay->update([
-            'dayName' => $request->day
+        
+        $defaultDay->delete();
+        // return dd($request->input());
+        $request->validate(
+            [
+                'restaurant_id' => 'required|integer',
+                'day' => 'required|in:monday,tuesday,wednesday,thursday,friday,saturday,sunday',
+
+            ],
+            [
+                'day' => 'the day must be a valid week day',
+                'restaurant_id' => 'the idRestaurant must be an integer'
+            ]
+        );
+
+        $ds = new DefaultDay();
+        $ds->create([
+            'restaurant_id' => $request['restaurant_id'],
+            'dayName' => $request['day']
         ]);
 
-        // $defaultDay->delete();
-
-
-
-        // foreach ($request->services as $s) {
-        //     $service = DefaultService::find($s['id']);
-        //     $service->update([
-        //         'service' => $s['service']
-        //     ]);
-        // }
+        $idLastItem = DefaultDay::all()->last()->id;
+        DefaultServiceController::store($request, $idLastItem);
     }
 
     /**

@@ -39,17 +39,15 @@ class DefaultServiceController extends Controller
      */
     public static function store($request, $idLastItem)
     {
-        // $validator = $request->validate(
-        //     [
-        //         'idDay' => 'required|integer',
-        //         'services.*' => 'required|string',
+        $validator = $request->validate(
+            [
+                'services.*' => 'required|string',
 
-        //     ],
-        //     [
-        //         'idDay' => 'the idday must be an integer',
-        //         'services.*' => 'the service must be a string'
-        //     ]
-        // );
+            ],
+            [
+                'services.*' => 'the service must be a string'
+            ]
+        );
 
         $services = $request['services'];
 

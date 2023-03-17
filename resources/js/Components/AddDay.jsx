@@ -1,14 +1,20 @@
 import { router } from "@inertiajs/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const AddDay = ({ errors, dayy, editable }) => {
     const [day, setDay] = useState(dayy ? dayy.dayName : "day");
-    const [services, setServices] = useState(dayy ? dayy.default_services : [{id: "", service: ""}]);
+    const [services, setServices] = useState(
+        dayy ? dayy.default_services : [{ id: "", service: "" }]
+    );
     const [submitButton, setSubmitButton] = useState("");
+
+    useEffect(() => {
+        console.log(errors);
+    }, [errors]);
 
     const addService = () => {
         const newService = {
-            id: services[services.length - 1].id + 1,
+            id: services.length > 0 ? services[services.length - 1].id + 1 : 1,
             service: "",
         };
         setServices([...services, newService]);
@@ -46,9 +52,10 @@ const AddDay = ({ errors, dayy, editable }) => {
             router.delete(`/defaultDays/${dayy.id}`);
         } else if (submitButton === "edit") {
             router.put(`/defaultDays/${dayy.id}`, {
+                restaurant_id: 1,
                 day: day,
-                services: services
-            })
+                services: services.map((service) => service.service),
+            });
         }
     }
     return (
@@ -159,9 +166,7 @@ const ServiceInput = ({
                     x
                 </div>
             </div>
-            <div className="text-red-600">
-                {errors[`services.${index}.service`]}
-            </div>
+            <div className="text-red-600">{errors[`services.${index}`]}</div>
         </div>
     );
 };
