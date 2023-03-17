@@ -1,9 +1,11 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\DefaultDayController;
 use App\Http\Controllers\DefaultServiceController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RestaurantController;
+use App\Models\DefaultDay;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -42,4 +44,5 @@ use Inertia\Inertia;
 
 Route::get('/', [CategoryController::class, 'categories']);
 Route::resource('defaultServices', DefaultServiceController::class);
+Route::resource('defaultDays', DefaultDayController::class);
 Route::resource('restaurants', RestaurantController::class);

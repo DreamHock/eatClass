@@ -1,10 +1,19 @@
 import { router } from "@inertiajs/react";
-import { useState } from "react";
+import { usePage } from "@inertiajs/react";
+import { useState, useEffect } from "react";
 
-const AddDay = ({ errors, dayy, editable }) => {
-    const [day, setDay] = useState(dayy ? dayy.dayName : "day");
-    const [services, setServices] = useState(dayy ? dayy.default_services : [{id: "", service: ""}]);
+const EditableDay = ({ dayy, errors, serv }) => {
+    const [day, setDay] = useState(dayy);
+    const [services, setServices] = useState(
+        serv.map((s) => {
+            return { id: s.id, service: s.service };
+        })
+    );
     const [submitButton, setSubmitButton] = useState("");
+
+    useEffect(() => {
+        console.log(serv);
+    }, []);
 
     const addService = () => {
         const newService = {
@@ -37,18 +46,13 @@ const AddDay = ({ errors, dayy, editable }) => {
     function handleSubmit(e) {
         e.preventDefault();
         if (submitButton === "add") {
-            router.post("/defaultDays", {
-                restaurant_id: 1,
+            router.post("/defaultServices", {
+                idRestaurant: 1,
                 day,
-                services: services.map((service) => service.service),
+                services,
             });
         } else if (submitButton === "delete") {
-            router.delete(`/defaultDays/${dayy.id}`);
-        } else if (submitButton === "edit") {
-            router.put(`/defaultDays/${dayy.id}`, {
-                day: day,
-                services: services
-            })
+            router.delete(`/defaultServices/${service.id}`);
         }
     }
     return (
@@ -79,10 +83,11 @@ const AddDay = ({ errors, dayy, editable }) => {
             {services.map((ser, index) => {
                 return (
                     <ServiceInput
-                        key={ser.id}
                         index={index}
                         errors={errors}
                         ser={ser}
+                        key={ser.id}
+                        addService={addService}
                         deleteService={deleteService}
                         handleServiceChange={handleServiceChange}
                     />
@@ -98,36 +103,27 @@ const AddDay = ({ errors, dayy, editable }) => {
             >
                 <div className="select-none">+</div>
             </div>
-            {editable ? (
-                <div className="flex gap-2">
-                    <button
-                        onClick={() => setSubmitButton("delete")}
-                        type="submit"
-                        className="flex-1 focus:outline-none text-white bg-red-600 hover:bg-red-700 font-medium rounded text-sm px-5 py-2"
-                    >
-                        delete
-                    </button>
-                    <button
-                        onClick={() => setSubmitButton("edit")}
-                        type="submit"
-                        className="flex-1 focus:outline-none text-white bg-sky-500 hover:bg-sky-600 font-medium rounded text-sm px-5 py-2"
-                    >
-                        edit
-                    </button>
-                </div>
-            ) : (
+            <div className="flex gap-2">
                 <button
-                    onClick={() => setSubmitButton("add")}
+                    onClick={() => setSubmitButton("delete")}
                     type="submit"
-                    className="focus:outline-none text-white bg-green-500 hover:bg-green-600 font-medium rounded text-sm px-5 py-2"
+                    className="flex-1 focus:outline-none text-white bg-red-600 hover:bg-red-700 font-medium rounded text-sm px-5 py-2"
                 >
-                    Add day
+                    delete
                 </button>
-            )}
+                <button
+                    onClick={() => setSubmitButton("edit")}
+                    type="submit"
+                    className="flex-1 focus:outline-none text-white bg-sky-500 hover:bg-sky-600 font-medium rounded text-sm px-5 py-2"
+                >
+                    edit
+                </button>
+            </div>
         </form>
     );
 };
-export default AddDay;
+
+export default EditableDay;
 
 const ServiceInput = ({
     ser,
@@ -136,20 +132,41 @@ const ServiceInput = ({
     errors,
     index,
 }) => {
+    const [inputActive, setInputActive] = useState(true);
+    const [service, setService] = useState(ser.service);
+
     return (
         <div>
             <div className="mb-2 flex relative">
-                <input
-                    onChange={(e) => {
-                        // setService(e.target.value);
-                        handleServiceChange(e.target.value, ser.id);
-                    }}
-                    value={ser.service}
-                    autoFocus
-                    type="text"
-                    placeholder="Enter a service"
-                    className="border border-slate-900 rounded h-8 p-1 flex justify-end items-center shadow-sm w-full"
-                />
+                {inputActive ? (
+                    <input
+                        onChange={(e) => {
+                            setService(e.target.value);
+                            handleServiceChange(e.target.value, ser.id);
+                        }}
+                        value={service}
+                        autoFocus
+                        onBlur={() => {
+                            setInputActive(false);
+                        }}
+                        // onFocus={}
+                        type="text"
+                        placeholder="service"
+                        className="border border-slate-900 rounded h-8 p-1 flex justify-end items-center shadow-sm w-full"
+                    />
+                ) : (
+                    <div
+                        onClick={() => {
+                            setInputActive(true);
+                        }}
+                        className={`border border-slate-900 rounded h-8 shadow-sm p-1 flex items-center overflow-hidden w-full ${
+                            !service &&
+                            "text-slate-400 text-2xl justify-end px-1"
+                        }`}
+                    >
+                        {service}
+                    </div>
+                )}
                 <div
                     onClick={() => {
                         deleteService(ser.id);

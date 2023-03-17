@@ -1,22 +1,27 @@
 import Layout from "@/Layouts/Layout";
-import { usePage } from "@inertiajs/react";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import AddDay from "../Components/AddDay";
 
-const AddWeek = () => {
-    const [clicked, setClicked] = useState(false);
-    const {errors} = usePage().props
+const AddWeek = ({ defaultDays, errors }) => {
+    // useEffect(() => {
+    //     console.log(errors);
+    // }, [errors]);
     useEffect(() => {
-        console.log(errors);
-    }, [clicked]);
+        console.log(defaultDays);
+    }, [defaultDays]);
+
     return (
         <Layout>
-            <div className=" flex flex-col items-center">
+            <div className="flex flex-col items-center">
                 <h2 className="font-bold">Default Week</h2>
-                <div className="flex gap-2">
-                    <AddDay errors={errors}/>
+                <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-2">
+                    {
+                        defaultDays.map((day)=>{
+                            return <AddDay key={day.id} dayy={day} errors={errors} editable={true}/>
+                        })
+                    }
+                    <AddDay errors={errors} />
                 </div>
-                <button onClick={() => setClicked(!clicked)}>click</button>
             </div>
         </Layout>
     );

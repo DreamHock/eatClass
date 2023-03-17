@@ -10,11 +10,11 @@ class DefaultService extends Model
     use HasFactory;
     protected $fillable = [
         'service',
-        'restaurant_id',
-        'weekDayName',
+        'default_day_id'
     ];
 
-    function restaurant() {
-        return $this->belongsTo(Restaurant::class);
+    function defaultDay()
+    {
+        return $this->belongsTo(DefaultDay::class);
     }
 }

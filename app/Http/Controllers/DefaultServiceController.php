@@ -23,49 +23,46 @@ class DefaultServiceController extends Controller
      */
     public function create()
     {
-        $defaultServices = DefaultService::all();
-        return Inertia::render('AddWeek', ['defaultServices' => $defaultServices]);
+        // $defaultServices = DB::table('default_Services')
+        //     ->select('*')
+        //     ->orderBy('weekDayName')
+        //     ->get()
+        //     ->groupBy('weekDayName')
+        //     ->map(function ($items) {
+        //         return $items;
+        //     });
+        // return Inertia::render('AddWeek', ['defaultServices' => $defaultServices]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public static function store($request, $idLastItem)
     {
-        // $validator = Validator::make($request->all(), [
-        //     'idRestaurant' => 'require|string',
-        //     'day' => 'required|string',
-        //     'services.*.id' => 'require|integer',
-        //     'services.*.service' => 'require|string',
+        // $validator = $request->validate(
+        //     [
+        //         'idDay' => 'required|integer',
+        //         'services.*' => 'required|string',
 
-        // ]);
-        $validator = $request->validate(
-            [
-                'idRestaurant' => 'required|integer',
-                'day' => 'required|in:monday, tuesday, wednesday, thursday, friday, saturday, sunday',
-                'services.*.id' => 'required|integer',
-                'services.*.service' => 'required|string',
+        //     ],
+        //     [
+        //         'idDay' => 'the idday must be an integer',
+        //         'services.*' => 'the service must be a string'
+        //     ]
+        // );
 
-            ],
-            [
-                'day' => 'the day must be a valid week day',
-                'services.*.service' => 'the service must be a string'
-            ]
-        );
-
-        $services = $validator['services'];
+        $services = $request['services'];
 
         foreach ($services as $service) {
             $ds = new DefaultService;
             $ds->create([
-                'service' => $service['service'],
-                'restaurant_id' => $validator['idRestaurant'],
-                'weekDayName' => $validator['day']
+                'service' => $service,
+                'default_day_id' => $idLastItem,
             ]);
         }
 
 
-        return dd($validator);
+        // return dd($validator);
     }
 
     /**
@@ -97,6 +94,5 @@ class DefaultServiceController extends Controller
      */
     public function destroy(DefaultService $defaultService)
     {
-        //
     }
 }

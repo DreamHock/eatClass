@@ -24,8 +24,8 @@ class Restaurant extends Model
         return $this->hasMany(Service::class);
     }
 
-    function DefaultServices()
+    function DefaultDays()
     {
-        return $this->hasMany(DefaultService::class);
+        return $this->hasMany(DefaultDay::class);
     }
 }

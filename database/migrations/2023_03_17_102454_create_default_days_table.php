@@ -11,12 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('default_services', function (Blueprint $table) {
+        Schema::create('default_days', function (Blueprint $table) {
             $table->id();
-            $table->string('service');
-            $table->foreignId('restaurant_id');
+            $table->foreignId('restaurant_id')->constrained('restaurants');
+            $table->string('dayName');
             $table->string('typeDay')->default('regular');
-            $table->string('weekDayName');
             $table->timestamps();
         });
     }
@@ -26,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('default_services');
+        Schema::dropIfExists('default_days');
     }
 };
