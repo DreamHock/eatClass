@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DefaultDay;
 use App\Models\Restaurant;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -37,7 +38,8 @@ class RestaurantController extends Controller
     public function show(Restaurant $restaurant)
     {
         $res = Restaurant::with('services')->where('id', $restaurant->id)->get();
-        return Inertia::render('Restaurant', ['restaurant' => $res]);
+        $defaultDays = DefaultDay::with('defaultServices')->where('restaurant_id', $restaurant->id)->get();
+        return Inertia::render('Restaurant', ['restaurant' => $res, 'defaultDays' => $defaultDays]);
     }
 
     /**

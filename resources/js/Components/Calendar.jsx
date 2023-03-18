@@ -13,7 +13,7 @@ import React, { useState, useEffect } from "react";
 import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
 import "../../css/calendar.css";
 
-const Calendar = ({ services, setServices }) => {
+const Calendar = ({ services, setServices, defaultDays }) => {
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [activeDate, setActiveDate] = useState(new Date());
 
@@ -61,6 +61,7 @@ const Calendar = ({ services, setServices }) => {
         for (let d = 0; d < 7; d++) {
             week.push(
                 <Day
+                    defaultDays={defaultDays}
                     currentDate={currentDate}
                     selectedDate={selectedDate}
                     activeDate={activeDate}
@@ -118,37 +119,57 @@ const Day = ({
     setSelectedDate,
     services,
     setServices,
+    defaultDays,
 }) => {
-    const [dayServices, setDayServices] = useState([]);
     const [render, setRender] = useState(true);
     const cloneDate = currentDate;
 
-    useEffect(()=>{
+    useEffect(() => {
         const getServicesCurrentDay = () => {
-            const ds = services.filter((s) => {
+            const s = services.filter((s) => {
                 return isSameDay(new Date(s.date), currentDate);
             });
-            setServices(ds);
+            if(s.length > 0) {
+                setServices([...s]);
+            } else {
+                const ds = [];
+                defaultDays.map((defaultDay) => {
+                    if (
+                        defaultDay.dayName.toLowerCase() ===
+                        format(currentDate, "EEEE").toLowerCase()
+                    ) {
+                        defaultDay.default_services.map(dds=>{
+                            ds.push(dds);
+                        })
+                    }
+                });
+                setServices([...ds]);
+            }
         };
-        getServicesCurrentDay()
-    }, [render])
-
+        getServicesCurrentDay();
+    }, [render]);
 
     return (
         <div
-            
             key={d}
-            className={`day cursor-pointer hover:bg-orange-500 text-slate-50 relative
-            ${
-                services.some((service) => {
-                    return isSameDay(new Date(service.date), currentDate)
-                })
-                
-                    ? " after:content-[''] after:absolute after:w-2 after:h-2 after:border-2 after:border-white after:rounded-full after:bg-orange-500 after:hover:bg-sky-500 after:top-0 after:left-0"
-                    : ""
-            }
+            className={`day hover:bg-orange-500 text-slate-50 relative
                 ${
-                    isSameMonth(currentDate, activeDate) &&
+                    services.some((service) => {
+                        return isSameDay(new Date(service.date), currentDate);
+                    })
+                        ? `${
+                              !isSameDay(selectedDate, currentDate) &&
+                              "bg-slate-500"
+                          } after:content-[''] after:absolute after:w-2 after:h-2 after:border-2 after:border-white after:rounded-full after:bg-orange-500 after:hover:bg-sky-500 after:top-0 after:left-0`
+                        : ""
+                }
+                ${
+                    defaultDays.some((defaultDay) => {
+                        return (
+                            defaultDay.dayName.toLowerCase() ===
+                            format(currentDate, "EEEE").toLowerCase()
+                        );
+                    }) &&
                     !isSameDay(currentDate, new Date()) &&
                     !isSameDay(selectedDate, currentDate)
                         ? " bg-slate-500 "
@@ -172,7 +193,7 @@ const Day = ({
                 `}
             onClick={() => {
                 setSelectedDate(cloneDate);
-                setRender(!render)
+                setRender(!render);
                 console.log(cloneDate);
             }}
         >

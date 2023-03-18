@@ -1,21 +1,20 @@
-
 import Reservation from "@/Components/Reservation";
 import Layout from "@/Layouts/Layout";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-const Restaurant = (props) => {
-    const [restaurant, setRestaurant] = useState(props.restaurant);
+const Restaurant = ({ restaurant, defaultDays }) => {
+    // const [restaurant, setRestaurant] = useState(props.restaurant);
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-    };
-    console.log(props);
+    useEffect(() => {
+        console.log(restaurant);
+        console.log(defaultDays);
+    }, []);
 
     return (
         <Layout>
-            <div>restaurant : {props.restaurant[0].id}</div>
+            <div>restaurant : {restaurant[0].id}</div>
             {/* <Reservation restaurant={restaurant} /> */}
-            <Reservation restaurant={restaurant} />
+            <Reservation restaurant={restaurant} defaultDays={defaultDays}/>
         </Layout>
     );
 };
