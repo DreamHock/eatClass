@@ -18,11 +18,12 @@ class ServiceFactory extends Factory
     public function definition(): array
     {
         return [
-            'restaurant_id' => Restaurant::all()->random(),
-            'service' => fake()->name(),
-            'date' => fake()->dateTime(),
-            'duration' => fake()->randomElement([60, 120, 180]),
-            'interval' => fake()->randomElement([15, 30, 60])
+            // 'restaurant_id' => Restaurant::all()->random(),
+            // 'service' => fake()->name(),
+            // 'date' => fake()->dateTime(),
+            // 'from' => fake()->time('H:i'),
+            // 'to' => fake()->time('H:i'),
+            // 'interval' => fake()->randomElement([15, 30, 60])
             // $table->dateTime('date');
             // $table->float('duration',2,2);
             // $table->float('interval');

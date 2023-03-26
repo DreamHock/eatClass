@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import Calendar from "./Calendar";
+import DurationInterval from "./DurationInterval";
 import Services from "./Services";
 
 const Reservation = ({ restaurant, defaultDays }) => {
@@ -7,9 +8,9 @@ const Reservation = ({ restaurant, defaultDays }) => {
     const [selectedService, setSelectedService] = useState("");
     const [dayServices, setDayServices] = useState([]);
 
-    useEffect(() => {
-        console.log(selectedService);
-    }, [selectedService]);
+    // useEffect(() => {
+    //     setCompleteSelectedService(services.find((service) => service.id === selectedService));
+    // }, [selectedService]);
 
     useEffect(() => {
         console.log(dayServices);
@@ -22,7 +23,11 @@ const Reservation = ({ restaurant, defaultDays }) => {
                 setServices={setDayServices}
                 defaultDays={defaultDays}
             />
-            <Services setService={setSelectedService} services={dayServices} />
+            <Services
+                setSelectedService={setSelectedService}
+                services={dayServices}
+            />
+            <DurationInterval selectedService={selectedService} dayServices={dayServices} />
         </div>
     );
 };

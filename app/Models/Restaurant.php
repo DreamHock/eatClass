@@ -9,6 +9,8 @@ class Restaurant extends Model
 {
     use HasFactory;
 
+    static public $restaurant;
+
     function category()
     {
         return $this->belongsTo(Category::class);

@@ -13,10 +13,13 @@ return new class extends Migration
     {
         Schema::create('services', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('restaurant_id')->constrained('restaurants');
+            $table->foreignId('restaurant_id')->constrained('restaurants')
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
             $table->string('service');
-            $table->dateTime('date');
-            $table->integer('duration');
+            $table->date('date');
+            $table->time('from');
+            $table->time('to');
             $table->integer('interval');
             $table->boolean('active')->default(true);
             $table->timestamps();

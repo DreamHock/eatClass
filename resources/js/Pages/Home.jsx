@@ -1,4 +1,5 @@
 // import react from 'react';
+import Guest from "@/Layouts/GuestLayout";
 import Layout from "@/Layouts/Layout";
 import { router, useForm } from "@inertiajs/react";
 import { useState } from "react";
@@ -6,13 +7,12 @@ import { useEffect } from "react";
 
 const Home = (props) => {
     const [categories, setCategories] = useState(props.categories);
-    const [fCategory, setFCategory] = useState("all");
+    const [fCategory, setFCategory] = useState("category");
 
     // const {data, setData, processing, post} = useForm()
 
     useEffect(() => {
-        console.log(fCategory);
-        if (fCategory !== "all") {
+        if (fCategory !== "category") {
             const fCat = props.categories.filter((cat) => {
                 return cat.id == fCategory;
             });
@@ -26,16 +26,14 @@ const Home = (props) => {
         <Layout>
             <div className="flex flex-col items-center">
                 <header className="flex m-3">
-                    <h2>Home</h2>
                     <select
-                        name=""
-                        id=""
+                        className="rounded hover:bg-gray-100 cursor-pointer"
                         value={fCategory}
                         onChange={(e) => setFCategory(e.target.value)}
                     >
                         <>
-                            <option value="all" defaultValue>
-                                All
+                            <option value="category" defaultValue>
+                                Category
                             </option>
                             {props.categories.map((cat) => {
                                 return (
@@ -74,9 +72,9 @@ const Home = (props) => {
                                                     `restaurants/${restaurant.id}`
                                                 );
                                             }}
-                                            className="bg-green-500 hover:bg-green-600 duration-200 w-16 text-white rounded"
+                                            className="bg-green-500 hover:bg-green-600 duration-200 py-1 px-2 text-white rounded"
                                         >
-                                            Reserve
+                                            View Restaurant
                                         </button>
                                     </div>
                                     {/* <div className=" bg-slate-600 w-full h-1 ml-auto duration-300 origin-left transform scale-x-0 bg-deep-purple-accent-400 group-hover:scale-x-100" /> */}

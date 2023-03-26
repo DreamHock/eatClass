@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('default_days', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('restaurant_id')->constrained('restaurants');
+            $table->foreignId('restaurant_id')->constrained('restaurants')
+                ->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('dayName');
             $table->string('typeDay')->default('regular');
             $table->timestamps();

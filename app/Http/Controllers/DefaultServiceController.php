@@ -39,28 +39,18 @@ class DefaultServiceController extends Controller
      */
     public static function store($request, $idLastItem)
     {
-        $validator = $request->validate(
-            [
-                'services.*' => 'required|string',
-
-            ],
-            [
-                'services.*' => 'the service must be a string'
-            ]
-        );
 
         $services = $request['services'];
-
         foreach ($services as $service) {
             $ds = new DefaultService;
             $ds->create([
-                'service' => $service,
+                'service' => $service['service'],
+                'from' => $service['from'],
+                'to' => $service['to'],
+                'interval' => $service['interval'],
                 'default_day_id' => $idLastItem,
             ]);
         }
-
-
-        // return dd($validator);
     }
 
     /**

@@ -14,7 +14,7 @@ import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
 import "../../css/calendar.css";
 
 const Calendar = ({ services, setServices, defaultDays }) => {
-    const [selectedDate, setSelectedDate] = useState(new Date());
+    const [selectedDate, setSelectedDate] = useState();
     const [activeDate, setActiveDate] = useState(new Date());
 
     const getHeader = () => {
@@ -129,7 +129,7 @@ const Day = ({
             const s = services.filter((s) => {
                 return isSameDay(new Date(s.date), currentDate);
             });
-            if(s.length > 0) {
+            if (s.length > 0) {
                 setServices([...s]);
             } else {
                 const ds = [];
@@ -138,9 +138,9 @@ const Day = ({
                         defaultDay.dayName.toLowerCase() ===
                         format(currentDate, "EEEE").toLowerCase()
                     ) {
-                        defaultDay.default_services.map(dds=>{
+                        defaultDay.default_services.map((dds) => {
                             ds.push(dds);
-                        })
+                        });
                     }
                 });
                 setServices([...ds]);
@@ -152,17 +152,15 @@ const Day = ({
     return (
         <div
             key={d}
-            className={`day hover:bg-orange-500 text-slate-50 relative
+            className={`day text-slate-50 relative
                 ${
                     services.some((service) => {
                         return isSameDay(new Date(service.date), currentDate);
-                    })
-                        ? `${
-                              !isSameDay(selectedDate, currentDate) &&
-                              "bg-slate-500"
-                          } after:content-[''] after:absolute after:w-2 after:h-2 after:border-2 after:border-white after:rounded-full after:bg-orange-500 after:hover:bg-sky-500 after:top-0 after:left-0`
-                        : ""
+                    }) &&
+                    `${!isSameDay(selectedDate, currentDate) && "bg-slate-500"}
+                    hover:bg-orange-500 after:content-[''] after:absolute after:w-2 after:h-2 after:border-2 after:border-white after:rounded-full after:bg-orange-500 after:hover:bg-sky-500 after:top-0 after:left-0`
                 }
+
                 ${
                     defaultDays.some((defaultDay) => {
                         return (
@@ -171,29 +169,46 @@ const Day = ({
                         );
                     }) &&
                     !isSameDay(currentDate, new Date()) &&
-                    !isSameDay(selectedDate, currentDate)
-                        ? " bg-slate-500 "
-                        : "  "
-                } 
-                ${
-                    !isSameMonth(currentDate, activeDate) &&
                     !isSameDay(selectedDate, currentDate) &&
-                    !isSameDay(currentDate, new Date())
-                        ? " bg-slate-300 "
-                        : "  "
+                    " bg-slate-500 hover:bg-orange-500"
                 } 
+                
                 ${isSameDay(selectedDate, currentDate) ? "bg-orange-500" : ""}
                 ${
                     isSameDay(currentDate, new Date()) &&
-                    !isSameDay(selectedDate, currentDate)
-                        ? "bg-sky-500"
-                        : ""
+                    !isSameDay(selectedDate, currentDate) &&
+                    "bg-sky-500"
                 }
                 
+                ${
+                    !isSameDay(selectedDate, currentDate) &&
+                    !isSameDay(currentDate, new Date()) &&
+                    !defaultDays.some((defaultDay) => {
+                        return (
+                            defaultDay.dayName.toLowerCase() ===
+                            format(currentDate, "EEEE").toLowerCase()
+                        );
+                    }) &&
+                    !services.some((service) => {
+                        return isSameDay(new Date(service.date), currentDate);
+                    }) &&
+                    "bg-slate-200"
+                }
                 `}
             onClick={() => {
-                setSelectedDate(cloneDate);
-                setRender(!render);
+                if (
+                    services.some((service) => {
+                        return isSameDay(new Date(service.date), currentDate);
+                    }) ||
+                    defaultDays.some((defaultDay) => {
+                        return (
+                            defaultDay.dayName.toLowerCase() ===
+                            format(currentDate, "EEEE").toLowerCase()
+                        );
+                    })
+                ) {
+                    setSelectedDate(cloneDate), setRender(!render);
+                }
                 console.log(cloneDate);
             }}
         >

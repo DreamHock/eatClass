@@ -7,6 +7,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RestaurantController;
 use App\Models\DefaultDay;
 use Illuminate\Foundation\Application;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -40,9 +41,16 @@ use Inertia\Inertia;
 //     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 // });
 
-// require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
+
+
+Route::middleware('auth')->group(function () {
+  Route::get('/dashboard', function () {
+    return Inertia::render('Dashboard', ['user' => Auth::user()]);
+  })->name('dashboard');
+  Route::resource('defaultServices', DefaultServiceController::class);
+  Route::resource('defaultDays', DefaultDayController::class);
+});
 
 Route::get('/', [CategoryController::class, 'categories']);
-Route::resource('defaultServices', DefaultServiceController::class);
-Route::resource('defaultDays', DefaultDayController::class);
 Route::resource('restaurants', RestaurantController::class);

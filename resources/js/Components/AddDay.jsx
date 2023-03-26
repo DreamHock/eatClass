@@ -1,10 +1,23 @@
-import { router } from "@inertiajs/react";
+import { router, usePage } from "@inertiajs/react";
+import { format } from "date-fns";
 import { useState, useEffect } from "react";
+import ServiceInformations from "./ServiceInformations";
 
-const AddDay = ({ errors, dayy, editable }) => {
+const AddDay = ({dayy, editable }) => {
     const [day, setDay] = useState(dayy ? dayy.dayName : "day");
+    const {errors} = usePage().props 
     const [services, setServices] = useState(
-        dayy ? dayy.default_services : [{ id: "", service: "" }]
+        dayy
+            ? dayy.default_services
+            : [
+                  {
+                      id: 1,
+                      service: "",
+                      from: format(new Date(0, 0, 0, 12, 0), "HH:mm"),
+                      to: format(new Date(0, 0, 0, 12, 0), "HH:mm"),
+                      interval: 15,
+                  },
+              ]
     );
     const [submitButton, setSubmitButton] = useState("");
 
@@ -15,7 +28,9 @@ const AddDay = ({ errors, dayy, editable }) => {
     const addService = () => {
         const newService = {
             id: services.length > 0 ? services[services.length - 1].id + 1 : 1,
-            service: "",
+            from: format(new Date(0, 0, 0, 12, 0), "HH:mm"),
+            to: format(new Date(0, 0, 0, 12, 0), "HH:mm"),
+            interval: 15,
         };
         setServices([...services, newService]);
     };
@@ -23,7 +38,10 @@ const AddDay = ({ errors, dayy, editable }) => {
     const handleServiceChange = (service, id) => {
         let desiredService = services.map((s) => {
             if (s.id === id) {
-                s.service = service;
+                s.service = service.service;
+                s.from = service.from;
+                s.to = service.to;
+                s.interval = service.interval;
             }
             return s;
         });
@@ -43,19 +61,31 @@ const AddDay = ({ errors, dayy, editable }) => {
     function handleSubmit(e) {
         e.preventDefault();
         if (submitButton === "add") {
-            router.post("/defaultDays", {
-                restaurant_id: 1,
-                day,
-                services: services.map((service) => service.service),
-            });
+            router.post(
+                "/defaultDays",
+                {
+                    restaurant_id: 1,
+                    day,
+                    services: services.map((service) => service),
+                },
+                {
+                    errorBag: "add",
+                }
+            );
         } else if (submitButton === "delete") {
             router.delete(`/defaultDays/${dayy.id}`);
         } else if (submitButton === "edit") {
-            router.put(`/defaultDays/${dayy.id}`, {
-                restaurant_id: 1,
-                day: day,
-                services: services.map((service) => service.service),
-            });
+            router.put(
+                `/defaultDays/${dayy.id}`,
+                {
+                    restaurant_id: 1,
+                    day: day,
+                    services: services.map((service) => service),
+                },
+                {
+                    errorBag: `edit${day}`,
+                }
+            );
         }
     }
     return (
@@ -63,10 +93,10 @@ const AddDay = ({ errors, dayy, editable }) => {
             onSubmit={(e) => {
                 handleSubmit(e);
             }}
-            className="shadow-md p-4 w-52 flex flex-col"
+            className="shadow-md p-4 w-64 flex flex-col bg-white rounded-md"
         >
             <select
-                className="p-1 h-8 rounded"
+                className="p-1 h-8 rounded cursor-pointer hover:bg-gray-100"
                 onChange={(e) => setDay(e.target.value)}
                 value={day}
             >
@@ -81,14 +111,15 @@ const AddDay = ({ errors, dayy, editable }) => {
                 <option value="saturday">Saturday</option>
                 <option value="sunday">Sunday</option>
             </select>
-            <div className="text-red-600">{errors.day}</div>
+            <div className="text-red-800">{errors.add && errors.add.day}</div>
             <div>sevices:</div>
             {services.map((ser, index) => {
                 return (
-                    <ServiceInput
+                    <ServiceInformations
+                        editable={editable}
+                        day={day}
                         key={ser.id}
                         index={index}
-                        errors={errors}
                         ser={ser}
                         deleteService={deleteService}
                         handleServiceChange={handleServiceChange}
@@ -100,33 +131,36 @@ const AddDay = ({ errors, dayy, editable }) => {
                 onClick={() => {
                     addService();
                 }}
-                className={`border border-slate-900 rounded h-8 shadow-sm p-1 flex items-center overflow-hidden w-full mb-2 text-slate-400 text-2xl justify-end px-1"
+                className={`cursor-pointer border border-gray-800 text-gray-800 hover:bg-gray-100 rounded h-8 shadow-sm p-1 flex items-center overflow-hidden w-full mb-2 text-2xl justify-end px-1"
                             `}
             >
-                <div className="select-none">+</div>
+                <div className="select-none flex justify-between w-full">
+                    <div className="text-sm flex items-center">Add service</div>
+                    <div>+</div>
+                </div>
             </div>
             {editable ? (
                 <div className="flex gap-2">
                     <button
                         onClick={() => setSubmitButton("delete")}
                         type="submit"
-                        className="flex-1 focus:outline-none text-white bg-red-600 hover:bg-red-700 font-medium rounded text-sm px-5 py-2"
+                        className="flex-1 focus:outline-none text-red-800 border border-red-800 bg-red-200 hover:bg-red-300 font-medium rounded text-sm px-5 py-2"
                     >
-                        delete
+                        Delete
                     </button>
                     <button
                         onClick={() => setSubmitButton("edit")}
                         type="submit"
-                        className="flex-1 focus:outline-none text-white bg-sky-500 hover:bg-sky-600 font-medium rounded text-sm px-5 py-2"
+                        className="flex-1 focus:outline-none text-gray-800 border border-gray-800  bg-gray-200 hover:bg-gray-300  font-medium rounded text-sm px-5 py-2"
                     >
-                        edit
+                        Save
                     </button>
                 </div>
             ) : (
                 <button
                     onClick={() => setSubmitButton("add")}
                     type="submit"
-                    className="focus:outline-none text-white bg-green-500 hover:bg-green-600 font-medium rounded text-sm px-5 py-2"
+                    className="focus:outline-none bg-sky-200 text-sky-800 border border-sky-800 hover:bg-sky-300  font-medium rounded text-sm px-5 py-2"
                 >
                     Add day
                 </button>
@@ -135,38 +169,3 @@ const AddDay = ({ errors, dayy, editable }) => {
     );
 };
 export default AddDay;
-
-const ServiceInput = ({
-    ser,
-    deleteService,
-    handleServiceChange,
-    errors,
-    index,
-}) => {
-    return (
-        <div>
-            <div className="mb-2 flex relative">
-                <input
-                    onChange={(e) => {
-                        // setService(e.target.value);
-                        handleServiceChange(e.target.value, ser.id);
-                    }}
-                    value={ser.service}
-                    autoFocus
-                    type="text"
-                    placeholder="Enter a service"
-                    className="border border-slate-900 rounded h-8 p-1 flex justify-end items-center shadow-sm w-full"
-                />
-                <div
-                    onClick={() => {
-                        deleteService(ser.id);
-                    }}
-                    className="flex justify-center items-center absolute right-[-11px] top-1 select-none text-red-600 font-extrabold cursor-pointer"
-                >
-                    x
-                </div>
-            </div>
-            <div className="text-red-600">{errors[`services.${index}`]}</div>
-        </div>
-    );
-};

@@ -4,7 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\DefaultDay;
 use App\Models\DefaultService;
+use App\Rules\validateInterval;
+use Carbon\Carbon;
+use DateTime;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Date;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 
 class DefaultDayController extends Controller
@@ -15,7 +22,7 @@ class DefaultDayController extends Controller
     public function index()
     {
         $defaultDays = DefaultDay::with('defaultServices')->get();
-        return Inertia::render('AddWeek', ['defaultDays' => $defaultDays]);
+        return Inertia::render('AddWeek', ['defaultDays' => $defaultDays, 'auth' => Auth::user()]);
     }
 
     /**
@@ -32,19 +39,43 @@ class DefaultDayController extends Controller
      */
     public function store(Request $request)
     {
-        // return dd($request->input());
-        $request->validate(
+        $validator = Validator::make(
+            $request->all(),
             [
                 'restaurant_id' => 'required|integer',
                 'day' => 'required|in:monday,tuesday,wednesday,thursday,friday,saturday,sunday',
-                'services.*' => 'required|string',
-
+                'services' => 'required|array',
+                'services.*.service' => 'required|string',
+                'services.*.from' => 'required|date_format:"H:i"',
+                'services.*.to' => 'required|date_format:"H:i"|after:services.*.from',
+                'services.*.interval' => [
+                    'required',
+                    function ($attribute, $value, $fail) use ($request) {
+                        $to = Carbon::parse(DateTime::createFromFormat('H:i', $request->input(str_replace('interval', 'to', $attribute))));
+                        $from = Carbon::parse(DateTime::createFromFormat('H:i', $request->input(str_replace('interval', 'from', $attribute))));
+                        $diffToFrom = $to->diffInMinutes($from);
+                        if ($diffToFrom % $value != 0) {
+                            $fail("");
+                        }
+                    }
+                ],
             ],
             [
-                'day' => 'the day must be a valid week day',
-                'services.*' => 'the service must be a valid service'
+                'day' => 'The day must be a valid week day',
+                'services' => 'The services information must be filled',
+                'services.*.service' => 'The service must be valid',
+                'services.*.from' => 'From must be a valid time',
+                'services.*.to' => 'To must be a valid and greater than from',
+                'services.*.interval' => 'duraion(from-to) should be devided by interval',
             ]
         );
+
+        if ($validator->fails()) {
+            throw new ValidationException($validator);
+        }
+
+
+
 
         $ds = new DefaultDay();
         $ds->create([
@@ -77,21 +108,29 @@ class DefaultDayController extends Controller
      */
     public function update(Request $request, DefaultDay $defaultDay)
     {
-        
-        $defaultDay->delete();
-        // return dd($request->input());
+        return dd($request);
         $request->validate(
             [
                 'restaurant_id' => 'required|integer',
                 'day' => 'required|in:monday,tuesday,wednesday,thursday,friday,saturday,sunday',
+                'services' => 'required|array',
+                'services.*.service' => 'required|string',
+                'services.*.from' => 'required|date_format:"H:i"',
+                'services.*.to' => 'required|date_format:"H:i"',
+                'services.*.interval' => 'required|integer|in:15,30,60'
 
             ],
             [
                 'day' => 'the day must be a valid week day',
-                'restaurant_id' => 'the idRestaurant must be an integer'
+                'services' => 'the services information must be filled',
+                'services.*.service' => 'the service must be valid',
+                'services.*.from' => 'from must be a valid time',
+                'services.*.to' => 'to must be a valid time',
+                'services.*.interval' => 'the interval must be 15, 30 or 60'
             ]
         );
 
+        $defaultDay->delete();
         $ds = new DefaultDay();
         $ds->create([
             'restaurant_id' => $request['restaurant_id'],

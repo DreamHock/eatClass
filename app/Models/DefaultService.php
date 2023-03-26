@@ -10,7 +10,10 @@ class DefaultService extends Model
     use HasFactory;
     protected $fillable = [
         'service',
-        'default_day_id'
+        'default_day_id',
+        'from',
+        'to',
+        'interval'
     ];
 
     function defaultDay()

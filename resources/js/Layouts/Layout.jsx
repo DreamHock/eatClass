@@ -1,17 +1,21 @@
-import { Link, router } from "@inertiajs/react";
+import { Link } from "@inertiajs/react";
 
 const Layout = ({ children }) => {
     return (
-        <div className="flex flex-col items-center">
-            <div className="bg-sky-500 w-full p-3 text-white">
-                <Link href='/' className="">
-                    <span className="text-4xl after:content-[''] after:inline-block after:bg-orange-500 after:w-0.5 after:h-6 after:relative after:top-[0.5px]">
-                        eat
-                    </span>
-                    <span className="text-2xl">class</span>
+        <div className="min-h-screen flex flex-col items-center bg-gray-100">
+            <header>
+                <Link href="/" className="">
+                    <div>
+                        <span className="text-8xl after:content-[''] after:inline-block after:bg-yellow-500 after:w-1.5 after:h-16 after:relative after:top-[0.5px]">
+                            eat
+                        </span>
+                        <span className="text-4xl">class</span>
+                    </div>
                 </Link>
+            </header>
+            <div className="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md sm:rounded-lg">
+                {children}
             </div>
-            <>{children}</>
         </div>
     );
 };

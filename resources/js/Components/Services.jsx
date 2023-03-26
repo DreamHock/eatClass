@@ -1,6 +1,6 @@
 import React from "react";
 
-const Services = ({ setService, services }) => {
+const Services = ({ setSelectedService, services }) => {
     return (
         <>
             <h3>Veuiller choisir un service</h3>
@@ -9,7 +9,7 @@ const Services = ({ setService, services }) => {
                 id="services"
                 className="outline-none border-black mb-3 rounded"
                 defaultValue="services"
-                onChange={(e) => setService(e.target.value)}
+                onChange={(e) => setSelectedService(e.target.value)}
             >
                 <option value="services" disabled>
                     Services
