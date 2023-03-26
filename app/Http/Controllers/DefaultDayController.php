@@ -10,6 +10,7 @@ use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Date;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
@@ -37,13 +38,27 @@ class DefaultDayController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function storeValidation($request)
     {
         $validator = Validator::make(
             $request->all(),
             [
                 'restaurant_id' => 'required|integer',
-                'day' => 'required|in:monday,tuesday,wednesday,thursday,friday,saturday,sunday',
+                'day' => [
+                    'required', 'in:monday,tuesday,wednesday,thursday,friday,saturday,sunday',
+                    function ($attribute, $value, $fail) {
+                        $daysObject = DB::table('default_days')->distinct('dayName')->get('dayName');
+                        $daysObject = json_decode($daysObject, true);
+
+                        $days = array_map(function ($item) {
+                            return $item['dayName'];
+                        }, $daysObject);
+
+                        if (in_array($value, $days)) {
+                            $fail('');
+                        }
+                    }
+                ],
                 'services' => 'required|array',
                 'services.*.service' => 'required|string',
                 'services.*.from' => 'required|date_format:"H:i"',
@@ -61,7 +76,7 @@ class DefaultDayController extends Controller
                 ],
             ],
             [
-                'day' => 'The day must be a valid week day',
+                'day' => 'The day must be a valid week day and should not be repeated',
                 'services' => 'The services information must be filled',
                 'services.*.service' => 'The service must be valid',
                 'services.*.from' => 'From must be a valid time',
@@ -73,10 +88,17 @@ class DefaultDayController extends Controller
         if ($validator->fails()) {
             throw new ValidationException($validator);
         }
+    }
 
-
-
-
+    public function store(Request $request)
+    {
+        // $daysObject = DB::table('default_days')->distinct('dayName')->get('dayName');
+        // $daysObject = json_decode($daysObject, true);
+        // $days = array_map(function ($item) {
+        //     return $item['dayName'];
+        // }, $daysObject);
+        // return $days;
+        $this->storeValidation($request);
         $ds = new DefaultDay();
         $ds->create([
             'restaurant_id' => $request['restaurant_id'],
@@ -108,27 +130,7 @@ class DefaultDayController extends Controller
      */
     public function update(Request $request, DefaultDay $defaultDay)
     {
-        return dd($request);
-        $request->validate(
-            [
-                'restaurant_id' => 'required|integer',
-                'day' => 'required|in:monday,tuesday,wednesday,thursday,friday,saturday,sunday',
-                'services' => 'required|array',
-                'services.*.service' => 'required|string',
-                'services.*.from' => 'required|date_format:"H:i"',
-                'services.*.to' => 'required|date_format:"H:i"',
-                'services.*.interval' => 'required|integer|in:15,30,60'
-
-            ],
-            [
-                'day' => 'the day must be a valid week day',
-                'services' => 'the services information must be filled',
-                'services.*.service' => 'the service must be valid',
-                'services.*.from' => 'from must be a valid time',
-                'services.*.to' => 'to must be a valid time',
-                'services.*.interval' => 'the interval must be 15, 30 or 60'
-            ]
-        );
+        $this->storeValidation($request);
 
         $defaultDay->delete();
         $ds = new DefaultDay();

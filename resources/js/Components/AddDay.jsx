@@ -3,9 +3,9 @@ import { format } from "date-fns";
 import { useState, useEffect } from "react";
 import ServiceInformations from "./ServiceInformations";
 
-const AddDay = ({dayy, editable }) => {
+const AddDay = ({ dayy, editable }) => {
     const [day, setDay] = useState(dayy ? dayy.dayName : "day");
-    const {errors} = usePage().props 
+    const { errors } = usePage().props;
     const [services, setServices] = useState(
         dayy
             ? dayy.default_services
@@ -111,7 +111,12 @@ const AddDay = ({dayy, editable }) => {
                 <option value="saturday">Saturday</option>
                 <option value="sunday">Sunday</option>
             </select>
-            <div className="text-red-800">{errors.add && errors.add.day}</div>
+            {editable && errors[`edit${day}`] && (
+                <div className="text-red-800">{errors[`edit${day}`]['day']}</div>
+            )}
+            {!editable && errors[`add`] && (
+                <div className="text-red-800">{errors["add"]['day']}</div>
+            )}
             <div>sevices:</div>
             {services.map((ser, index) => {
                 return (
