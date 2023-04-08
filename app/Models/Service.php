@@ -13,4 +13,9 @@ class Service extends Model
     {
         return $this->belongsTo(Restaurant::class);
     }
+
+    public function users()
+    {
+        return $this->morphToMany(User::class, 'reservable');
+    }
 }

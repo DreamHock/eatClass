@@ -10,7 +10,7 @@ const ServiceInformations = ({
 }) => {
     return (
         <div className="flex items-center mb-2">
-            <div className="bg-gray-200 p-3 rounded-l border-l border-t border-b border-gray-600 w-11/12">
+            <div className="bg-slate-200 p-3 rounded-l border-l border-t border-b border-slate-600 w-11/12">
                 <ServiceInput
                     editable={editable}
                     day={day}

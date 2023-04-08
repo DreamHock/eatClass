@@ -158,7 +158,7 @@ const Day = ({
                         return isSameDay(new Date(service.date), currentDate);
                     }) &&
                     `${!isSameDay(selectedDate, currentDate) && "bg-slate-500"}
-                    hover:bg-orange-500 after:content-[''] after:absolute after:w-2 after:h-2 after:border-2 after:border-white after:rounded-full after:bg-orange-500 after:hover:bg-sky-500 after:top-0 after:left-0`
+                    hover:bg-yellow-500 cursor-pointer after:content-[''] after:absolute after:w-2 after:h-2 after:border-2 after:border-white after:rounded-full after:bg-yellow-500 after:hover:bg-sky-500 after:top-0 after:left-0`
                 }
 
                 ${
@@ -170,14 +170,27 @@ const Day = ({
                     }) &&
                     !isSameDay(currentDate, new Date()) &&
                     !isSameDay(selectedDate, currentDate) &&
-                    " bg-slate-500 hover:bg-orange-500"
+                    " bg-slate-500 hover:bg-yellow-500 cursor-pointer"
                 } 
                 
-                ${isSameDay(selectedDate, currentDate) ? "bg-orange-500" : ""}
+                ${
+                    isSameDay(selectedDate, currentDate)
+                        ? "bg-yellow-500 cursor-pointer"
+                        : ""
+                }
+                
                 ${
                     isSameDay(currentDate, new Date()) &&
                     !isSameDay(selectedDate, currentDate) &&
-                    "bg-sky-500"
+                    `bg-sky-300 ${
+                        defaultDays.some((defaultDay) => {
+                            return (
+                                defaultDay.dayName.toLowerCase() ===
+                                format(currentDate, "EEEE").toLowerCase()
+                            );
+                        }) && "hover:bg-yellow-500 cursor-pointer"
+                    }
+                    `
                 }
                 
                 ${

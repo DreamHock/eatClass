@@ -65,7 +65,7 @@ const AddDay = ({ dayy, editable }) => {
                 "/defaultDays",
                 {
                     restaurant_id: 1,
-                    day,
+                    day: day,
                     services: services.map((service) => service),
                 },
                 {
@@ -96,7 +96,7 @@ const AddDay = ({ dayy, editable }) => {
             className="shadow-md p-4 w-64 flex flex-col bg-white rounded-md"
         >
             <select
-                className="p-1 h-8 rounded cursor-pointer hover:bg-gray-100"
+                className="p-1 h-8 rounded cursor-pointer hover:bg-slate-100"
                 onChange={(e) => setDay(e.target.value)}
                 value={day}
             >
@@ -112,10 +112,12 @@ const AddDay = ({ dayy, editable }) => {
                 <option value="sunday">Sunday</option>
             </select>
             {editable && errors[`edit${day}`] && (
-                <div className="text-red-800">{errors[`edit${day}`]['day']}</div>
+                <div className="text-red-800">
+                    {errors[`edit${day}`]["day"]}
+                </div>
             )}
             {!editable && errors[`add`] && (
-                <div className="text-red-800">{errors["add"]['day']}</div>
+                <div className="text-red-800">{errors["add"]["day"]}</div>
             )}
             <div>sevices:</div>
             {services.map((ser, index) => {
@@ -136,7 +138,7 @@ const AddDay = ({ dayy, editable }) => {
                 onClick={() => {
                     addService();
                 }}
-                className={`cursor-pointer border border-gray-800 text-gray-800 hover:bg-gray-100 rounded h-8 shadow-sm p-1 flex items-center overflow-hidden w-full mb-2 text-2xl justify-end px-1"
+                className={`cursor-pointer border border-slate-800 text-slate-800 hover:bg-slate-100 rounded h-8 shadow-sm p-1 flex items-center overflow-hidden w-full mb-2 text-2xl justify-end px-1"
                             `}
             >
                 <div className="select-none flex justify-between w-full">
@@ -156,7 +158,7 @@ const AddDay = ({ dayy, editable }) => {
                     <button
                         onClick={() => setSubmitButton("edit")}
                         type="submit"
-                        className="flex-1 focus:outline-none text-gray-800 border border-gray-800  bg-gray-200 hover:bg-gray-300  font-medium rounded text-sm px-5 py-2"
+                        className="flex-1 focus:outline-none text-slate-800 border border-slate-800  bg-slate-200 hover:bg-slate-300  font-medium rounded text-sm px-5 py-2"
                     >
                         Save
                     </button>

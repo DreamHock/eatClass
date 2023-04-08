@@ -20,4 +20,7 @@
     @inertia
 </body>
 
+<script>
+</script>
+
 </html>

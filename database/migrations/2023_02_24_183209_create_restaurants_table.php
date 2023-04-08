@@ -16,9 +16,9 @@ return new class extends Migration
             $table->foreignId('category_id')->constrained('categories');
             $table->string('name');
             $table->string('city');
-            $table->string('logoPath')->default(fake()->text());
-            $table->double('latitude')->default(8.12345);
-            $table->double('longitude')->default(7.12345);
+            $table->string('logoPath')->default('');
+            $table->double('latitude')->default(0);
+            $table->double('longitude')->default(0);
             $table->timestamps();
         });
     }

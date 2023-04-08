@@ -7,7 +7,9 @@ namespace Database\Seeders;
 use App\Models\Category;
 use App\Models\Restaurant;
 use App\Models\Service;
+use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -22,9 +24,25 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
-        Category::factory(2)->create();
-        Restaurant::factory(5)
-            ->create();
+        // Category::factory(2)->create();
+        // Restaurant::factory(5)
+        //     ->create();
         // Service::factory(150)->create();
+        Category::factory(1)->create([
+            'category' => 'pizza',
+        ]);
+        Category::factory(1)->create([
+            'category' => 'burger',
+        ]);
+        User::factory(1)->create([
+            'name' => 'yahya',
+            'email' => 'yahya@gmail.com',
+            'password' => Hash::make('yahya123'), //yahya123
+        ]);
+        Restaurant::factory(1)->create([
+            'category_id' => 1,
+            'name' => 'burger world',
+            'city' => 'marrakech'
+        ]);
     }
 }

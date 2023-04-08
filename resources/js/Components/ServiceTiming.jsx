@@ -37,7 +37,7 @@ const ServiceTiming = ({ ser, handleServiceChange, day, index, editable }) => {
                     </button>
                     <div className="flex flex-col items-center">
                         <>
-                            <div className="text-sm text-gray-500">from</div>
+                            <div className="text-sm text-slate-500">from</div>
                             <div>{ser.from}</div>
                         </>
                     </div>
@@ -90,7 +90,7 @@ const ServiceTiming = ({ ser, handleServiceChange, day, index, editable }) => {
                     </button>
                     <div className="flex flex-col items-center">
                         <>
-                            <div className="text-sm text-gray-500">to</div>
+                            <div className="text-sm text-slate-500">to</div>
                             <div>{ser.to}</div>
                         </>
                     </div>
@@ -137,7 +137,7 @@ const ServiceTiming = ({ ser, handleServiceChange, day, index, editable }) => {
                     </button>
                     <div className="flex flex-col items-center">
                         <>
-                            <div className="text-sm text-gray-500">
+                            <div className="text-sm text-slate-500">
                                 Interval
                             </div>
                             <div>{ser.interval} Min</div>

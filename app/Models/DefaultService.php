@@ -20,4 +20,9 @@ class DefaultService extends Model
     {
         return $this->belongsTo(DefaultDay::class);
     }
+
+    public function users()
+    {
+        return $this->morphToMany(User::class, 'reservable');
+    }
 }

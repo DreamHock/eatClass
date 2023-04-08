@@ -27,7 +27,7 @@ const Home = (props) => {
             <div className="flex flex-col items-center">
                 <header className="flex m-3">
                     <select
-                        className="rounded hover:bg-gray-100 cursor-pointer"
+                        className="rounded hover:bg-slate-100 cursor-pointer"
                         value={fCategory}
                         onChange={(e) => setFCategory(e.target.value)}
                     >
@@ -58,10 +58,10 @@ const Home = (props) => {
                                         <p className="mb-2 font-bold">
                                             {restaurant.name}
                                         </p>
-                                        <p className="text-sm leading-5 text-gray-900">
+                                        <p className="text-sm leading-5 text-slate-900">
                                             {restaurant.city}
                                         </p>
-                                        <p className="text-xs leading-5 text-gray-600">
+                                        <p className="text-xs leading-5 text-slate-600">
                                             {category.category}
                                         </p>
                                     </div>

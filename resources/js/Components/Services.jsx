@@ -7,7 +7,7 @@ const Services = ({ setSelectedService, services }) => {
             <select
                 name=""
                 id="services"
-                className="outline-none border-black mb-3 rounded"
+                className=" mb-3 rounded cursor-pointer hover:bg-slate-100"
                 defaultValue="services"
                 onChange={(e) => setSelectedService(e.target.value)}
             >

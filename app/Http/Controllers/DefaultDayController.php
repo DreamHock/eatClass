@@ -38,7 +38,7 @@ class DefaultDayController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function storeValidation($request)
+    public function storeValidation($request, $edit = false)
     {
         $validator = Validator::make(
             $request->all(),
@@ -46,13 +46,19 @@ class DefaultDayController extends Controller
                 'restaurant_id' => 'required|integer',
                 'day' => [
                     'required', 'in:monday,tuesday,wednesday,thursday,friday,saturday,sunday',
-                    function ($attribute, $value, $fail) {
+                    function ($attribute, $value, $fail) use($edit) {
                         $daysObject = DB::table('default_days')->distinct('dayName')->get('dayName');
                         $daysObject = json_decode($daysObject, true);
 
                         $days = array_map(function ($item) {
                             return $item['dayName'];
                         }, $daysObject);
+                        if($edit == true) {
+                            $key = array_search($value, $days);
+                            if ($key) {
+                                array_splice($days, $key, 1);
+                            }
+                        }
 
                         if (in_array($value, $days)) {
                             $fail('');
@@ -81,7 +87,7 @@ class DefaultDayController extends Controller
                 'services.*.service' => 'The service must be valid',
                 'services.*.from' => 'From must be a valid time',
                 'services.*.to' => 'To must be a valid and greater than from',
-                'services.*.interval' => 'duraion(from-to) should be devided by interval',
+                'services.*.interval' => 'duration(from-to) should be devided by interval',
             ]
         );
 
@@ -130,7 +136,7 @@ class DefaultDayController extends Controller
      */
     public function update(Request $request, DefaultDay $defaultDay)
     {
-        $this->storeValidation($request);
+        $this->storeValidation($request, true);
 
         $defaultDay->delete();
         $ds = new DefaultDay();

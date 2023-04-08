@@ -13,10 +13,12 @@ return new class extends Migration
     {
         Schema::create('reservations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('custommer_id')->constrained('custommers');
-            // $table->foreignId('restaurant_id')->constrained('restaurants');
-            $table->foreignId('service_id')->constrained('services');
-            $table->string('status');
+            $table->string('name');
+            $table->string('phone');
+            $table->string('email');
+            $table->string('reservable_type');
+            $table->foreignId('reservable_id')->constrained('reservable');
+            $table->string('status')->default('');
             $table->timestamps();
         });
     }
