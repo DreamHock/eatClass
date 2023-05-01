@@ -4,10 +4,13 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DefaultDayController;
 use App\Http\Controllers\DefaultServiceController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\RestaurantController;
+use App\Mail\ReservationConfirmation;
 use App\Models\DefaultDay;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -52,5 +55,18 @@ Route::middleware('auth')->group(function () {
   Route::resource('defaultDays', DefaultDayController::class);
 });
 
-Route::get('/', [CategoryController::class, 'categories']);
-Route::resource('restaurants', RestaurantController::class);
+Route::middleware('guest')->group(function () {
+  Route::post('/reservations', [ReservationController::class, 'store']);
+  Route::get('/', [CategoryController::class, 'categories']);
+  Route::resource('restaurants', RestaurantController::class);
+});
+
+Route::get('send-email', function () {
+  $mailData = [
+    "name" => "Test NAME",
+    "dob" => "12/12/1990"
+  ];
+
+  // Mail::send()
+  dd("Mail Sent Successfully!");
+});

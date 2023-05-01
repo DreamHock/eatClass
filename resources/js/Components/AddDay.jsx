@@ -2,6 +2,7 @@ import { router, usePage } from "@inertiajs/react";
 import { format } from "date-fns";
 import { useState, useEffect } from "react";
 import ServiceInformations from "./ServiceInformations";
+import PrimaryButton from "./PrimaryButton";
 
 const AddDay = ({ dayy, editable }) => {
     const [day, setDay] = useState(dayy ? dayy.dayName : "day");
@@ -148,29 +149,32 @@ const AddDay = ({ dayy, editable }) => {
             </div>
             {editable ? (
                 <div className="flex gap-2">
-                    <button
+                    <PrimaryButton
                         onClick={() => setSubmitButton("delete")}
                         type="submit"
-                        className="flex-1 focus:outline-none text-red-800 border border-red-800 bg-red-200 hover:bg-red-300 font-medium rounded text-sm px-5 py-2"
+                        color='red'
+                        className="flex-1 font-medium rounded text-sm"
                     >
                         Delete
-                    </button>
-                    <button
+                    </PrimaryButton>
+                    <PrimaryButton
                         onClick={() => setSubmitButton("edit")}
                         type="submit"
-                        className="flex-1 focus:outline-none text-slate-800 border border-slate-800  bg-slate-200 hover:bg-slate-300  font-medium rounded text-sm px-5 py-2"
+                        color="slate"
+                        className="flex-1 font-medium rounded text-sm"
                     >
                         Save
-                    </button>
+                    </PrimaryButton>
                 </div>
             ) : (
-                <button
+                <PrimaryButton
                     onClick={() => setSubmitButton("add")}
                     type="submit"
-                    className="focus:outline-none bg-sky-200 text-sky-800 border border-sky-800 hover:bg-sky-300  font-medium rounded text-sm px-5 py-2"
+                    color="sky"
+                    className="flex-1 font-medium rounded text-sm"
                 >
                     Add day
-                </button>
+                </PrimaryButton>
             )}
         </form>
     );

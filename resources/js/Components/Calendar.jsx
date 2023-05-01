@@ -13,8 +13,7 @@ import React, { useState, useEffect } from "react";
 import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
 import "../../css/calendar.css";
 
-const Calendar = ({ services, setServices, defaultDays }) => {
-    const [selectedDate, setSelectedDate] = useState();
+const Calendar = ({ services, setServices, defaultDays, setSelectedDate, selectedDate }) => {
     const [activeDate, setActiveDate] = useState(new Date());
 
     const getHeader = () => {
@@ -223,6 +222,7 @@ const Day = ({
                     setSelectedDate(cloneDate), setRender(!render);
                 }
                 console.log(cloneDate);
+                console.log('hello')
             }}
         >
             {format(currentDate, "d")}

@@ -108,7 +108,7 @@ export default function Login({ status, canResetPassword }) {
                         >
                             Don't have an account?
                         </Link> */}
-                        <PrimaryButton className="ml-4" disabled={processing}>
+                        <PrimaryButton className="ml-4 w-32" disabled={processing}>
                             Log in
                         </PrimaryButton>
                     </div>

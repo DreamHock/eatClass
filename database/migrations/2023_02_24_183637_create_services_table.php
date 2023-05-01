@@ -18,8 +18,8 @@ return new class extends Migration
                 ->cascadeOnUpdate();
             $table->string('service');
             $table->date('date');
-            $table->time('from');
-            $table->time('to');
+            $table->string('from');
+            $table->string('to');
             $table->integer('interval');
             $table->boolean('active')->default(true);
             $table->timestamps();

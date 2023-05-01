@@ -12,7 +12,7 @@ const Restaurant = ({ restaurant, defaultDays }) => {
 
     return (
         <Layout>
-            <div>restaurant : {restaurant[0].id}</div>
+            <div>restaurant : {restaurant.id}</div>
             {/* <Reservation restaurant={restaurant} /> */}
             <Reservation restaurant={restaurant} defaultDays={defaultDays}/>
         </Layout>

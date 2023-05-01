@@ -12,9 +12,6 @@ class CategoryController extends Controller
 {
     function categories()
     {
-        // $allCategories = Category::with('restaurants')->get();
-        // $allRestaurants = Restaurant::with('category')->get();
-        // $allRestaurants = DB::select('select * from restaurants r inner join categories c on c.id = r.category_id');
         $allCategories = Category::with('restaurants')->get();
         return Inertia::render('Home', ['categories' => $allCategories]);
     }

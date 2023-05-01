@@ -21,8 +21,8 @@ class DefaultService extends Model
         return $this->belongsTo(DefaultDay::class);
     }
 
-    public function users()
+    public function reservation()
     {
-        return $this->morphToMany(User::class, 'reservable');
+        return $this->morphMany(Reservation::class, 'reservable');
     }
 }

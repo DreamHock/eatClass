@@ -13,7 +13,9 @@ return new class extends Migration
     {
         Schema::create('default_services', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('default_day_id')->constrained('default_days')->cascadeOnDelete();
+            $table->foreignId('default_day_id')->constrained('default_days')
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
             $table->string('service');
             $table->string('from');
             $table->string('to');

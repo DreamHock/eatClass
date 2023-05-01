@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Models\Restaurant;
 use App\Models\Service;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -44,5 +45,22 @@ class DatabaseSeeder extends Seeder
             'name' => 'burger world',
             'city' => 'marrakech'
         ]);
+        Service::factory(1)->create([
+            'restaurant_id' => 1,
+            'service' => 'breakfest',
+            'date' => Carbon::now(),
+            'from' => '08:00',
+            'to' => '11:00',
+            'interval' => 30
+        ]);
+        Service::factory(1)->create([
+            'restaurant_id' => 1,
+            'service' => 'lunch',
+            'date' => Carbon::now(),
+            'from' => '01:00',
+            'to' => '04:00',
+            'interval' => 30
+        ]);
+        
     }
 }

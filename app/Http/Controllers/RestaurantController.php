@@ -37,7 +37,7 @@ class RestaurantController extends Controller
      */
     public function show(Restaurant $restaurant)
     {
-        $res = Restaurant::with('services')->where('id', $restaurant->id)->get();
+        $res = Restaurant::with('services')->find($restaurant->id);
         $defaultDays = DefaultDay::with('defaultServices')->where('restaurant_id', $restaurant->id)->get();
         return Inertia::render('Restaurant', ['restaurant' => $res, 'defaultDays' => $defaultDays]);
     }

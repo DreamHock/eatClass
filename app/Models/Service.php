@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Service extends Model
 {
@@ -14,8 +15,9 @@ class Service extends Model
         return $this->belongsTo(Restaurant::class);
     }
 
-    public function users()
+    public function reservation(): MorphMany
     {
-        return $this->morphToMany(User::class, 'reservable');
+        return $this->morphMany(Reservation::class, 'reservable');
     }
+
 }

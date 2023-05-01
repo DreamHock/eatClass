@@ -28,7 +28,16 @@ class ReservationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // return dd($request->all());
+        // Reservation::create($request->validate([
+        //     'name' => ['required', 'string'],
+        //     'phone' => ['required', 'regex:/^0[67][0-9]{8}$/'],
+        //     'email' => ['required', 'email'],
+        //     'reservable_id' => 
+        // ]));
+        Reservation::create($request->all());
+
+        return redirect()->back();
     }
 
     /**

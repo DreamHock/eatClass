@@ -17,11 +17,15 @@ return new class extends Migration
             $table->string('phone');
             $table->string('email');
             $table->string('reservable_type');
-            $table->foreignId('reservable_id')->constrained('reservable');
-            $table->string('status')->default('');
+            $table->unsignedBigInteger('reservable_id');
+            $table->date('date');
+            $table->string('time');
+            $table->integer('nbrPeople');
+            $table->string('status')->default('pending');
             $table->timestamps();
         });
     }
+    
 
     /**
      * Reverse the migrations.

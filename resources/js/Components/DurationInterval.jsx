@@ -1,27 +1,25 @@
 import { add, differenceInMinutes, format, parse } from "date-fns";
 import { useEffect, useState } from "react";
 
-const DurationInterval = ({ selectedService, dayServices }) => {
-    const [completeSelectedService, setCompleteSelectedService] = useState("");
+const DurationInterval = ({ completeSelectedService, dayServices, setData }) => {
     let [addRepetitions, setAddRepetitions] = useState(0);
     let [selectedTime, setSelectedTime] = useState();
 
+    
     useEffect(() => {
-        setCompleteSelectedService(
-            dayServices.find((service) => service.id == selectedService)
-        );
-    }, [selectedService]);
-    useEffect(() => {
-        console.log(completeSelectedService);
-        completeSelectedService &&
+        if (completeSelectedService) {
             setAddRepetitions(
                 differenceInMinutes(
                     parse(completeSelectedService.to, "HH:mm", new Date()),
                     parse(completeSelectedService.from, "HH:mm", new Date())
                 )
-                //  / completeSelectedService.interval
             );
+        }
     }, [completeSelectedService]);
+
+    useEffect(() => {
+        setData("time", selectedTime);
+    }, [selectedTime]);
 
     const reservationTimes = () => {
         const times = [];
@@ -39,7 +37,11 @@ const DurationInterval = ({ selectedService, dayServices }) => {
             times.push(
                 <div
                     onClick={() => setSelectedTime(time)}
-                    className={` active:bg-yellow-900 rounded-xl flex justify-center py-1 select-none cursor-pointer text-white ${selectedTime === time ? 'bg-yellow-900' : 'bg-yellow-500 hover:bg-yellow-600'}`}
+                    className={` active:bg-yellow-900 rounded-xl flex justify-center py-1 select-none cursor-pointer text-white ${
+                        selectedTime === time
+                            ? "bg-yellow-900"
+                            : "bg-yellow-500 hover:bg-yellow-600"
+                    }`}
                     key={i}
                 >
                     {time}
