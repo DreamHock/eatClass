@@ -10,6 +10,15 @@ class Restaurant extends Model
     use HasFactory;
 
     static public $restaurant;
+    protected $fillable = [
+        'category_id',
+        'user_id',
+        'name',
+        'city',
+        'logoPath',
+        'latitude',
+        'longitude',
+    ];
 
     function category()
     {
@@ -29,5 +38,10 @@ class Restaurant extends Model
     function DefaultDays()
     {
         return $this->hasMany(DefaultDay::class);
+    }
+
+    function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

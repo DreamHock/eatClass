@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('restaurants', function (Blueprint $table) {
             $table->id();
             $table->foreignId('category_id')->constrained('categories');
+            $table->foreignId('user_id')->constrained('users');
+            $table->string('phone');
             $table->string('name');
             $table->string('city');
             $table->string('logoPath')->default('');

@@ -8,8 +8,9 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Inertia\Inertia;
 
-class reservationInformation extends Mailable
+class ReservationInformation extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -39,7 +40,7 @@ class reservationInformation extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'view.name',
+            view: 'emails.reserveInformation',
             // with: ['reservation' => $this->reservation]
         );
     }

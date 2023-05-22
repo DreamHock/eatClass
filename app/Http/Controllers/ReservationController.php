@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ReservationInformation;
 use App\Models\Reservation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Session;
+use Inertia\Inertia;
 
 class ReservationController extends Controller
 {
@@ -28,16 +32,17 @@ class ReservationController extends Controller
      */
     public function store(Request $request)
     {
-        // return dd($request->all());
         // Reservation::create($request->validate([
         //     'name' => ['required', 'string'],
         //     'phone' => ['required', 'regex:/^0[67][0-9]{8}$/'],
         //     'email' => ['required', 'email'],
         //     'reservable_id' => 
         // ]));
-        Reservation::create($request->all());
-
-        return redirect()->back();
+        $createdReservation = Reservation::create($request->all());
+        // Mail::send(new ReservationInformation($createdReservation));
+        // Session::remove('createdReservation');
+        // Session::put('createdReservation', $createdReservation);
+        // return Inertia::location('/mail');
     }
 
     /**

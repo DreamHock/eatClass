@@ -6,11 +6,7 @@ use App\Http\Controllers\DefaultServiceController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\RestaurantController;
-use App\Mail\ReservationConfirmation;
-use App\Models\DefaultDay;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -38,16 +34,15 @@ use Inertia\Inertia;
 //     return Inertia::render('Dashboard');
 // })->middleware(['auth', 'verified'])->name('dashboard');
 
-// Route::middleware('auth')->group(function () {
-//     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-//     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-//     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-// });
-
-require __DIR__ . '/auth.php';
-
-
 Route::middleware('auth')->group(function () {
+  Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+  Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+  Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+
+
+Route::middleware(['auth', 'admin'])->group(function () {
   Route::get('/dashboard', function () {
     return Inertia::render('Dashboard', ['user' => Auth::user()]);
   })->name('dashboard');
@@ -55,18 +50,13 @@ Route::middleware('auth')->group(function () {
   Route::resource('defaultDays', DefaultDayController::class);
 });
 
-Route::middleware('guest')->group(function () {
-  Route::post('/reservations', [ReservationController::class, 'store']);
-  Route::get('/', [CategoryController::class, 'categories']);
-  Route::resource('restaurants', RestaurantController::class);
-});
+Route::post('/reservations', [ReservationController::class, 'store']);
+Route::get('/', [CategoryController::class, 'categories']);
+Route::resource('restaurants', RestaurantController::class);
 
-Route::get('send-email', function () {
-  $mailData = [
-    "name" => "Test NAME",
-    "dob" => "12/12/1990"
-  ];
+Route::get('/mail', function () {
+  $createdReservation = session('createdReservation');
+  return view('emails.reserveInformation', ['createdReservation' => $createdReservation]);
+})->name('mail');
 
-  // Mail::send()
-  dd("Mail Sent Successfully!");
-});
+require __DIR__ . '/auth.php';

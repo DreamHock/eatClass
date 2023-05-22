@@ -13,7 +13,7 @@ const Layout = ({ children }) => {
                     </div>
                 </Link>
             </header>
-            <div className="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md sm:rounded-lg">
+            <div className="w-full sm:w-fit mt-6 px-6 py-4 bg-white shadow-md sm:rounded-lg">
                 {children}
             </div>
         </div>

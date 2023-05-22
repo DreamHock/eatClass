@@ -17,6 +17,7 @@ class RestaurantFactory extends Factory
      */
     public function definition(): array
     {
+        
         return [
             'category_id' => Category::all()->random(),
             'name' => fake()->name,

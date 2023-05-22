@@ -42,8 +42,10 @@ class DatabaseSeeder extends Seeder
         ]);
         Restaurant::factory(1)->create([
             'category_id' => 1,
+            'user_id' => 1,
             'name' => 'burger world',
-            'city' => 'marrakech'
+            'city' => 'marrakech',
+            'phone' => '0524203040'
         ]);
         Service::factory(1)->create([
             'restaurant_id' => 1,

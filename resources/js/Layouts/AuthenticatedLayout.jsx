@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 // import ApplicationLogo from "@/Components/ApplicationLogo";
 import Dropdown from "@/Components/Dropdown";
 import NavLink from "@/Components/NavLink";
@@ -75,11 +75,18 @@ export default function Authenticated({ auth, children }) {
 
                                     <Dropdown.Content>
                                         <Dropdown.Link
-                                            href={route("logout")}
+                                            href={route("admin.logout")}
                                             method="post"
                                             as="button"
                                         >
                                             Log Out
+                                        </Dropdown.Link>
+                                        <Dropdown.Link
+                                            href={route("profile.edit")}
+                                            method="get"
+                                            as="button"
+                                        >
+                                            Profile
                                         </Dropdown.Link>
                                     </Dropdown.Content>
                                 </Dropdown>
@@ -161,9 +168,12 @@ export default function Authenticated({ auth, children }) {
                         </div>
 
                         <div className="mt-3 space-y-1">
+                            <Dropdown.Link href={route("profile.edit")}>
+                                Profile
+                            </Dropdown.Link>
                             <ResponsiveNavLink
                                 method="post"
-                                href={route("logout")}
+                                href={route("admin.logout")}
                                 as="button"
                             >
                                 Log Out

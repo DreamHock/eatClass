@@ -41,4 +41,12 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    function restaurant()
+    {
+        if ($this->role == 'admin') {
+            return $this->hasOne(Restaurant::class, 'user_id');
+        }
+        return 'dont have a restaurant';
+    }
 }
