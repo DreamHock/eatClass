@@ -29,6 +29,32 @@ class RestaurantController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
     {
     }
 
@@ -37,7 +63,7 @@ class RestaurantController extends Controller
      */
     public function show(Restaurant $restaurant)
     {
-        $res = Restaurant::with('services')->find($restaurant->id);
+        $res = Restaurant::with(['services', 'category'])->find($restaurant->id);
         $defaultDays = DefaultDay::with('defaultServices')->where('restaurant_id', $restaurant->id)->get();
         return Inertia::render('Restaurant/Restaurant', ['restaurant' => $res, 'defaultDays' => $defaultDays]);
     }

@@ -18,10 +18,10 @@ const Restaurant = ({ restaurant, defaultDays }) => {
         <Layout>
             <div className="flex gap-10">
                 <div>
-                    <Overview />
+                    <Overview restaurant={restaurant}/>
                     <Menu />
-                    <Location />
-                    <OtherRestaurants />
+                    <Location restaurant={restaurant}/>
+                    {/* <OtherRestaurants /> */}
                 </div>
                 <Reservation
                     restaurant={restaurant}

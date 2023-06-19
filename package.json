@@ -21,6 +21,8 @@
     "dependencies": {
         "classnames": "^2.3.2",
         "date-fns": "^2.29.3",
+        "flowbite": "^1.6.5",
+        "flowbite-react": "^0.4.4",
         "react-calendar": "^4.0.0",
         "react-icons": "^4.7.1"
     }

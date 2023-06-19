@@ -11,6 +11,9 @@ const Home = (props) => {
 
     // const {data, setData, processing, post} = useForm()
 
+    useEffect(()=>{
+        console.log(props.categories)
+    }, [])
     useEffect(() => {
         if (fCategory !== "category") {
             const fCat = props.categories.filter((cat) => {
@@ -51,8 +54,9 @@ const Home = (props) => {
                             return (
                                 <div
                                     key={restaurant.id}
-                                    className="mb-3 w-96 flex justify-between overflow-hidden text-left transition-shadow duration-200 bg-white rounded shadow-xl group hover:shadow-2xl"
+                                    className="mb-3 w-[400px] flex justify-between overflow-hidden text-left transition-shadow duration-200 bg-white rounded-md shadow-xl group hover:shadow-2xl"
                                 >
+                                    <img src={restaurant.logoPath} alt="..." className="w-[100px]" />
                                     <div className="p-5">
                                         <div className=""></div>
                                         <p className="mb-2 font-bold">

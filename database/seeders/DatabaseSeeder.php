@@ -30,10 +30,10 @@ class DatabaseSeeder extends Seeder
         //     ->create();
         // Service::factory(150)->create();
         Category::factory(1)->create([
-            'category' => 'pizza',
+            'category' => 'burger',
         ]);
         Category::factory(1)->create([
-            'category' => 'burger',
+            'category' => 'pizza',
         ]);
         User::factory(1)->create([
             'name' => 'yahya',
@@ -45,6 +45,9 @@ class DatabaseSeeder extends Seeder
             'user_id' => 1,
             'name' => 'burger world',
             'city' => 'marrakech',
+            'location' => 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d47122292.41537385!2d-137.977294921875!3d43.87413818147481!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c25852b45519a9%3A0x7c17fba9feac45c4!2sBURGER%20WORLD!5e0!3m2!1sen!2sma!4v1684848562007!5m2!1sen!2sma',
+            'adresse' => '120 Lot Al Amane Mhamid',
+            'logoPath' => 'https://media-cdn.grubhub.com/image/upload/d_search:browse-images:default.jpg/w_300,q_100,fl_lossy,dpr_2.0,c_fit,f_auto,h_300/vqba5rtrkn87zuxvabfe',
             'phone' => '0524203040'
         ]);
         Service::factory(1)->create([
@@ -63,6 +66,5 @@ class DatabaseSeeder extends Seeder
             'to' => '04:00',
             'interval' => 30
         ]);
-        
     }
 }

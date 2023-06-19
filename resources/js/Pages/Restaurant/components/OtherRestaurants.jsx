@@ -2,7 +2,7 @@ import React from 'react'
 
 const OtherRestaurants = () => {
   return (
-    <div>Other Restaurants</div>
+    <div className=' text-2xl text-yellow-700'>Other Restaurants</div>
   )
 }
 

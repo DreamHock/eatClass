@@ -84,8 +84,8 @@ const Reservation = ({ restaurant, defaultDays }) => {
                 </div>
             ) : (
                 <div>
-                    <h2 className="text-yellow-800">
-                        Reservation informations
+                    <h2 className="text-yellow-800 text-2xl">
+                        Book a table
                     </h2>
 
                     <div
