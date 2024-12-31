@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\DefaultDay;
 use App\Models\Restaurant;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class RestaurantController extends Controller
@@ -14,7 +15,12 @@ class RestaurantController extends Controller
      */
     public function index()
     {
-        //
+        $restaurants = Restaurant::with('category')->get();
+
+        return Inertia::render('Admin/Restaurants', [
+            'user' => fn() => Auth::user(),
+            'restaurants' => fn() => $restaurants
+        ]);
     }
 
     /**
@@ -28,35 +34,7 @@ class RestaurantController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-    {
-    }
+    public function store(Request $request) {}
 
     /**
      * Display the specified resource.
@@ -66,6 +44,13 @@ class RestaurantController extends Controller
         $res = Restaurant::with(['services', 'category'])->find($restaurant->id);
         $defaultDays = DefaultDay::with('defaultServices')->where('restaurant_id', $restaurant->id)->get();
         return Inertia::render('Restaurant/Restaurant', ['restaurant' => $res, 'defaultDays' => $defaultDays]);
+    }
+
+    public function showAdmin(Restaurant $restaurant)
+    {
+        $res = Restaurant::with(['services', 'category'])->find($restaurant->id);
+        $defaultDays = DefaultDay::with('defaultServices')->where('restaurant_id', $restaurant->id)->get();
+        return Inertia::render('Admin/Restaurant', ['restaurant' => $res, 'defaultDays' => $defaultDays]);
     }
 
     /**
@@ -89,6 +74,6 @@ class RestaurantController extends Controller
      */
     public function destroy(Restaurant $restaurant)
     {
-        //
+        $restaurant->delete();
     }
 }

@@ -1,16 +1,26 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head } from "@inertiajs/react";
+import { ColumnDef } from "@tanstack/react-table";
+import { useEffect } from "react";
+import { DataTable } from "../../Components/DataTable";
+import { columns } from "../../Components/Columns";
 
-export default function Dashboard({auth}) {
+export default function Resturants({ auth, restaurants }) {
+    useEffect(() => {
+        console.log(restaurants);
+    }, []);
     return (
         <>
-            <Head title="Dashboard" />
+            <Head title="Resturants" />
             <AuthenticatedLayout auth={auth}>
                 <div className="py-12">
                     <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                         <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                             <div className="p-6 text-slate-900">
-                                You're logged in!
+                                <DataTable
+                                    data={restaurants}
+                                    columns={columns}
+                                />
                             </div>
                         </div>
                     </div>

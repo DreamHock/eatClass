@@ -21,18 +21,6 @@ use Inertia\Inertia;
 |
 */
 
-// Route::get('/', function () {
-//     return Inertia::render('Welcome', [
-//         'canLogin' => Route::has('login'),
-//         'canRegister' => Route::has('register'),
-//         'laravelVersion' => Application::VERSION,
-//         'phpVersion' => PHP_VERSION,
-//     ]);
-// });
-
-// Route::get('/dashboard', function () {
-//     return Inertia::render('Dashboard');
-// })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
   Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -43,16 +31,15 @@ Route::middleware('auth')->group(function () {
 
 
 Route::middleware(['auth', 'admin'])->group(function () {
-  Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard', ['user' => Auth::user()]);
-  })->name('dashboard');
-  Route::resource('defaultServices', DefaultServiceController::class);
-  Route::resource('defaultDays', DefaultDayController::class);
+  Route::group(['prefix' => 'admin'], function () {
+    Route::resource('/restaurants', RestaurantController::class);
+    Route::resource('default-services', DefaultServiceController::class);
+    Route::resource('default-days', DefaultDayController::class);
+  });
 });
 
 Route::post('/reservations', [ReservationController::class, 'store']);
 Route::get('/', [CategoryController::class, 'categories']);
-Route::resource('restaurants', RestaurantController::class);
 
 Route::get('/mail', function () {
   $createdReservation = session('createdReservation');

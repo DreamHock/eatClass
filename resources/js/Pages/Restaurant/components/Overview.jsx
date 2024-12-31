@@ -1,5 +1,5 @@
 import { Card, Carousel } from "flowbite-react";
-import { BiCategoryAlt, BiLocationPlus } from "react-icons/Bi";
+// import { BiCategoryAlt, BiLocationPlus } from "react-icons/Bi";
 import { AiFillPhone } from "react-icons/ai";
 import React from "react";
 
@@ -34,14 +34,14 @@ const Overview = ({ restaurant }) => {
                                     {restaurant.name}
                                 </h5>
                                 <div className="font-normal  text-yellow-700  flex items-center gap-1">
-                                    <BiCategoryAlt className="mb-[1px]" />
+                                    {/* <BiCategoryAlt className="mb-[1px]" /> */}
                                     <div>{restaurant.category.category}</div>
                                 </div>
                             </div>
                             <div className="font-normal text-gray-500 ">
                                 <div className="flex items-center">
                                     <div className=" inline-block mr-1 mb-[3px]">
-                                        <BiLocationPlus />
+                                        {/* <BiLocationPlus /> */}
                                     </div>
                                     {restaurant.adresse}
                                 </div>

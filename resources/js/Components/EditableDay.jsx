@@ -46,13 +46,13 @@ const EditableDay = ({ dayy, errors, serv }) => {
     function handleSubmit(e) {
         e.preventDefault();
         if (submitButton === "add") {
-            router.post("/defaultServices", {
+            router.post("/default-services", {
                 idRestaurant: 1,
                 day,
                 services,
             });
         } else if (submitButton === "delete") {
-            router.delete(`/defaultServices/${service.id}`);
+            router.delete(`/default-services/${service.id}`);
         }
     }
     return (

@@ -19,16 +19,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // \App\Models\User::factory(10)->create();
-
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
-        // Category::factory(2)->create();
-        // Restaurant::factory(5)
-        //     ->create();
-        // Service::factory(150)->create();
         Category::factory(1)->create([
             'category' => 'burger',
         ]);
@@ -36,20 +26,23 @@ class DatabaseSeeder extends Seeder
             'category' => 'pizza',
         ]);
         User::factory(1)->create([
-            'name' => 'yahya',
-            'email' => 'yahya@gmail.com',
-            'password' => Hash::make('yahya123'), //yahya123
+            'name' => 'harakat',
+            'email' => 'yahya@harakat.dev',
+            'password' => Hash::make('harakat.dev123'),
         ]);
-        Restaurant::factory(1)->create([
-            'category_id' => 1,
-            'user_id' => 1,
-            'name' => 'burger world',
-            'city' => 'marrakech',
-            'location' => 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d47122292.41537385!2d-137.977294921875!3d43.87413818147481!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c25852b45519a9%3A0x7c17fba9feac45c4!2sBURGER%20WORLD!5e0!3m2!1sen!2sma!4v1684848562007!5m2!1sen!2sma',
-            'adresse' => '120 Lot Al Amane Mhamid',
-            'logoPath' => 'https://media-cdn.grubhub.com/image/upload/d_search:browse-images:default.jpg/w_300,q_100,fl_lossy,dpr_2.0,c_fit,f_auto,h_300/vqba5rtrkn87zuxvabfe',
-            'phone' => '0524203040'
-        ]);
+
+        for ($i = 1; $i <= 10; $i++) {
+            Restaurant::factory(1)->create([
+                'category_id' => random_int(1, 2),
+                'user_id' => 1,
+                'name' => fake()->company,
+                'city' => fake()->city,
+                'location' => 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d47122292.41537385!2d-137.977294921875!3d43.87413818147481!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c25852b45519a9%3A0x7c17fba9feac45c4!2sBURGER%20WORLD!5e0!3m2!1sen!2sma!4v1684848562007!5m2!1sen!2sma',
+                'adresse' => '120 Lot Al Amane Mhamid',
+                'logoPath' => 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Burger_King_logo_%281999%29.svg/2024px-Burger_King_logo_%281999%29.svg.png',
+                'phone' => fake()->phoneNumber,
+            ]);
+        }
         Service::factory(1)->create([
             'restaurant_id' => 1,
             'service' => 'breakfest',

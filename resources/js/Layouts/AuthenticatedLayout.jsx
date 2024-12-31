@@ -17,8 +17,10 @@ export default function Authenticated({ auth, children }) {
                         <div className="flex">
                             <div className="shrink-0 flex items-center">
                                 <Link
-                                    href={route("dashboard")}
-                                    // active={route().current("dashboard").toString()}
+                                    href={route("restaurants.index")}
+                                    active={route()
+                                        .current("restaurants.index")
+                                        .toString()}
                                     className="relative bottom-[7px]"
                                 >
                                     <span className="text-4xl after:content-[''] after:inline-block after:bg-yellow-500 after:w-0.5 after:h-6 after:relative after:top-[0.5px]">
@@ -30,15 +32,17 @@ export default function Authenticated({ auth, children }) {
 
                             <div className="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                                 <NavLink
-                                    href={route("dashboard")}
-                                    active={route().current("dashboard")}
+                                    href={route("restaurants.index")}
+                                    active={route().current(
+                                        "restaurants.index"
+                                    )}
                                 >
-                                    Dashboard
+                                    Restaurants
                                 </NavLink>
                                 <NavLink
-                                    href={route("defaultDays.create")}
+                                    href={route("default-days.create")}
                                     active={route().current(
-                                        "defaultDays.create"
+                                        "default-days.create"
                                     )}
                                 >
                                     Add Week
@@ -144,14 +148,14 @@ export default function Authenticated({ auth, children }) {
                 >
                     <div className="pt-2 pb-3 space-y-1">
                         <ResponsiveNavLink
-                            href={route("dashboard")}
-                            active={route().current("dashboard")}
+                            href={route("restaurants.index")}
+                            active={route().current("restaurants.index")}
                         >
-                            Dashboard
+                            Restaurants
                         </ResponsiveNavLink>
                         <ResponsiveNavLink
-                            href={route("defaultDays.create")}
-                            active={route().current("defaultDays.create")}
+                            href={route("default-days.create")}
+                            active={route().current("default-days.create")}
                         >
                             Default week
                         </ResponsiveNavLink>

@@ -14,6 +14,11 @@ createInertiaApp({
         resolvePageComponent(
             `./Pages/${name}.jsx`,
             import.meta.glob("./Pages/**/*.jsx")
+        ).catch(() =>
+            resolvePageComponent(
+                `./Pages/${name}.tsx`,
+                import.meta.glob("./Pages/**/*.tsx")
+            )
         ),
     setup({ el, App, props }) {
         const root = createRoot(el);
@@ -23,5 +28,4 @@ createInertiaApp({
         showSpinner: true,
         color: "#4B5563",
     },
-}
-);
+});

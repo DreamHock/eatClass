@@ -1,0 +1,24 @@
+{
+    "compileOnSave": true,
+    "compilerOptions": {
+        "allowJs": true,
+        "sourceMap": true,
+        "moduleResolution": "node",
+        "lib": ["dom", "es2015", "es2016"],
+        "jsx": "react-jsx",
+        "target": "es5",
+        "module": "esnext",
+        "baseUrl": ".",
+        "types": ["vite/client"]
+    },
+    
+    "include": [
+        "resources/js/**/*.ts",
+        "resources/js/**/*.tsx",
+        "resources/js/**/*.d.ts",
+        "resources/js/**/*.js",
+        "resources/js/**/*.jsx",
+        "resources/js/**/*.d.js"
+    ],
+    "exclude": ["node_modules", "public"]
+}
