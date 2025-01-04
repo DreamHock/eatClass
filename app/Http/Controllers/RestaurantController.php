@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\DefaultDay;
+use App\Models\Menu;
 use App\Models\Restaurant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -41,9 +42,17 @@ class RestaurantController extends Controller
      */
     public function show(Restaurant $restaurant)
     {
-        $res = Restaurant::with(['services', 'category'])->find($restaurant->id);
+        $restaurant = Restaurant::with(['services', 'category'])->find($restaurant->id);
+        
+        $menu = Menu::where('restaurant_id', $restaurant->id)->get();
+
         $defaultDays = DefaultDay::with('defaultServices')->where('restaurant_id', $restaurant->id)->get();
-        return Inertia::render('Restaurant/Restaurant', ['restaurant' => $res, 'defaultDays' => $defaultDays]);
+
+        return Inertia::render('Restaurant/Restaurant', [
+            'restaurant' => $restaurant,
+            'menu' => $menu,
+            'defaultDays' => $defaultDays
+        ]);
     }
 
     public function showAdmin(Restaurant $restaurant)

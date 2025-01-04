@@ -6,7 +6,7 @@ import OtherRestaurants from "./components/OtherRestaurants";
 import Menu from "./components/Menu";
 import Location from "./components/Location";
 
-const Restaurant = ({ restaurant, defaultDays }) => {
+const Restaurant = ({ restaurant, defaultDays, menu }) => {
     // const [restaurant, setRestaurant] = useState(props.restaurant);
 
     useEffect(() => {
@@ -18,9 +18,9 @@ const Restaurant = ({ restaurant, defaultDays }) => {
         <Layout>
             <div className="flex gap-10">
                 <div>
-                    <Overview restaurant={restaurant}/>
-                    <Menu />
-                    <Location restaurant={restaurant}/>
+                    <Overview restaurant={restaurant} menu={menu} />
+                    <Menu menu={menu}/>
+                    <Location restaurant={restaurant} />
                     {/* <OtherRestaurants /> */}
                 </div>
                 <Reservation

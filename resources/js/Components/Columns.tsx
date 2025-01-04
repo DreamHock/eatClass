@@ -27,7 +27,7 @@ type Restaurant = {
     // user_id: number;
     // phone: string;
     name: string;
-    // adresse: string;
+    // address: string;
     city: string;
     // location: string;
     // logoPath: string;
@@ -47,6 +47,18 @@ export const columns: ColumnDef<Restaurant>[] = [
     {
         accessorKey: "name",
         header: "Name",
+        cell: ({ row }) => {
+            const restaurant = row.original;
+            return (
+                <Link
+                    method="get"
+                    href={route("admin.restaurants.show", restaurant.id)}
+                    className="hover:underline"
+                >
+                    {restaurant.name}
+                </Link>
+            );
+        },
     },
     {
         accessorKey: "city",
@@ -91,8 +103,11 @@ export const columns: ColumnDef<Restaurant>[] = [
                         </DropdownMenuItem>
                         <DropdownMenuItem>
                             <Link
-                                method="delete"
-                                href={route("restaurants.show", restaurant.id)}
+                                method="get"
+                                href={route(
+                                    "admin.restaurants.show",
+                                    restaurant.id
+                                )}
                             >
                                 View restaurant
                             </Link>
@@ -111,7 +126,7 @@ export const columns: ColumnDef<Restaurant>[] = [
                             <Link
                                 method="delete"
                                 href={route(
-                                    "restaurants.destroy",
+                                    "admin.restaurants.destroy",
                                     restaurant.id
                                 )}
                                 only={["restaurants"]}

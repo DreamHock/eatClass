@@ -16,8 +16,9 @@ class Restaurant extends Model
         'name',
         'city',
         'logoPath',
-        'latitude',
-        'longitude',
+        'location',
+        'phone',
+        'address'
     ];
 
     function category()
@@ -38,6 +39,11 @@ class Restaurant extends Model
     function DefaultDays()
     {
         return $this->hasMany(DefaultDay::class);
+    }
+
+    function menu()
+    {
+        return $this->hasMany(Menu::class);
     }
 
     function user()

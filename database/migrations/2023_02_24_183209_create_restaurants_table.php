@@ -17,12 +17,12 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users');
             $table->string('phone');
             $table->string('name');
-            $table->string('adresse');
+            $table->string('address');
             $table->string('city');
             $table->text('location');
             $table->string('logoPath')->default('');
-            $table->double('latitude')->default(0);
-            $table->double('longitude')->default(0);
+            $table->double('latitude')->nullable();
+            $table->double('longitude')->nullable();
             $table->timestamps();
         });
     }

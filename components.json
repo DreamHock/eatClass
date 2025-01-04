@@ -11,6 +11,7 @@
     "prefix": ""
   },
   "aliases": {
+    "@": "resources/js",
     "components": "@/components",
     "utils": "@/lib/utils",
     "ui": "@/components/ui",
