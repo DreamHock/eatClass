@@ -6,8 +6,9 @@ import Location from "../../Restaurant/components/Location";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head } from "@inertiajs/react";
 import { RestaurantForm } from "./Components/RestaurantForm";
+import { Toaster } from "@/components/ui/sonner";
 
-const RestaurantCreate = ({ auth, categories }) => {
+const RestaurantCreate = ({ auth, categories, restaurant }) => {
     return (
         <>
             <Head title="Create Restaurant" />
@@ -16,11 +17,12 @@ const RestaurantCreate = ({ auth, categories }) => {
                     <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                         <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                             <div className="p-6 text-slate-900">
-                                <RestaurantForm categories={categories} />
+                                <RestaurantForm categories={categories} restaurant={restaurant} />
                             </div>
                         </div>
                     </div>
                 </div>
+                <Toaster />
             </AuthenticatedLayout>
         </>
     );

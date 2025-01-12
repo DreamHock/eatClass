@@ -52,7 +52,7 @@ export const columns: ColumnDef<Restaurant>[] = [
             return (
                 <Link
                     method="get"
-                    href={route("admin.restaurants.show", restaurant.id)}
+                    href={route("admin.restaurants.edit", restaurant.id)}
                     className="hover:underline"
                 >
                     {restaurant.name}

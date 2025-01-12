@@ -22,8 +22,15 @@ import {
 } from "@/components/ui/select";
 import { FC, useEffect } from "react";
 import { router } from "@inertiajs/react";
+import { toast } from "sonner";
 
-export const RestaurantForm: FC<{ categories: any[] }> = ({ categories }) => {
+export const RestaurantForm: FC<{ categories: any[]; restaurant: any }> = ({
+    categories,
+    restaurant,
+}) => {
+    useEffect(() => {
+        console.log(restaurant);
+    }, []);
     const ACCEPTED_IMAGE_TYPES = [
         "image/jpeg",
         "image/jpg",
@@ -46,21 +53,19 @@ export const RestaurantForm: FC<{ categories: any[] }> = ({ categories }) => {
         location: z
             .string()
             .nonempty({ message: "Google maps location is required" }),
-        logo: z
-            .custom<FileList>()
-            .refine((files) => {
-                return files?.length > 0;
-            }, "Logo is required")
-            .refine((files) => {
-                return Array.from(files ?? []).every(
-                    (file) => sizeInMB(file.size) <= MAX_IMAGE_SIZE
-                );
-            }, `The maximum image size is ${MAX_IMAGE_SIZE}MB`)
-            .refine((files) => {
-                return Array.from(files ?? []).every((file) =>
-                    ACCEPTED_IMAGE_TYPES.includes(file?.type)
-                );
-            }, `Only ${ACCEPTED_IMAGE_TYPES.join(", ")} are allowed`),
+        logo: z.custom<FileList>().refine((files) => {
+            return files?.length > 0;
+        }, "Logo is required"),
+        // .refine((files) => {
+        //     return Array.from(files ?? []).every(
+        //         (file) => sizeInMB(file.size) <= MAX_IMAGE_SIZE
+        //     );
+        // }, `The maximum image size is ${MAX_IMAGE_SIZE}MB`)
+        // .refine((files) => {
+        //     return Array.from(files ?? []).every((file) =>
+        //         ACCEPTED_IMAGE_TYPES.includes(file?.type)
+        //     );
+        // }, `Only ${ACCEPTED_IMAGE_TYPES.join(", ")} are allowed`),
         menu: z
             .custom<FileList>()
             .refine((files) => {
@@ -81,12 +86,13 @@ export const RestaurantForm: FC<{ categories: any[] }> = ({ categories }) => {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            name: "",
-            city: "",
-            phone: "",
-            address: "",
-            location: "",
-            logo: null,
+            name: restaurant?.name ?? "",
+            city: restaurant?.city ?? "",
+            phone: restaurant?.phone ?? "",
+            address: restaurant?.address ?? "",
+            location: restaurant?.location ?? "",
+            logo: restaurant?.logoPath ?? "",
+            menu: restaurant?.menu ?? "",
         },
     });
 
@@ -94,12 +100,38 @@ export const RestaurantForm: FC<{ categories: any[] }> = ({ categories }) => {
     const menuRef = form.register("menu");
 
     function onSubmit(values: z.infer<typeof formSchema>) {
-        router.post(route("admin.restaurants.store"), values);
-    }
+        router.post(route("admin.restaurants.store"), values, {
+            onSuccess: () => {
+                toast("Restaurant successfully added");
+            },
+            onError: (errors) => {
+                console.log(errors);
 
-    useEffect(() => {
-        console.log(categories);
-    }, []);
+                for (const key in errors) {
+                    let formKey = key === "logoPath" ? "logo" : key;
+                    let logoRegex = /^logo./;
+                    let menuRegex = /^menu./;
+                    switch (true) {
+                        case key === "logoPath":
+                            formKey = "logo";
+                            break;
+                        case logoRegex.test(key):
+                            formKey = "logo";
+                            break;
+                        case menuRegex.test(key):
+                            formKey = "menu";
+                            break;
+                        default:
+                            formKey = key;
+                    }
+                    form.setError(formKey, {
+                        type: "manual",
+                        message: errors[key],
+                    });
+                }
+            },
+        });
+    }
 
     return (
         <Form {...form}>
@@ -259,6 +291,7 @@ export const RestaurantForm: FC<{ categories: any[] }> = ({ categories }) => {
                     name="menu"
                     render={({ field }) => (
                         <FormItem>
+                            {console.log(field)}
                             <div className="flex gap-2 items-center">
                                 <FormLabel>
                                     Menu: import multiple images (up to 4)

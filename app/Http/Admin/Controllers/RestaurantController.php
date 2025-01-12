@@ -42,6 +42,31 @@ class RestaurantController extends Controller
     public function store(Request $request)
     {
 
+        $validatedData = $request->validate(
+            [
+                'name' => ['required'],
+                'category_id' => ['required', 'exists:categories,id'],
+                'city' => 'required',
+                'location' => 'required',
+                'address' => 'required',
+                'phone' => 'required',
+                'logo' => ['array', 'size:1'], // Ensures exactly one file
+                'menu' => ['nullable', 'array', 'max:5'],  // Optional with a max of 5
+                'logo.*' => 'required|mimes:jpg,webp,png,jpeg|max:4096',
+                'menu.*' => 'required|mimes:jpg,webp,png,jpeg|max:4096',
+            ],
+            [
+                'logo.*.required' => 'A logo file is required.',
+                'logo.*.mimes' => "The logo must be a valid file ('webp', 'png', 'jpg', 'jpeg')",
+                'menu.*.required' => 'The menu is required.',
+                'menu.*.mimes' => "The menu must be a valid file ('webp', 'png', 'jpg', 'jpeg')",
+            ]
+        );
+
+        $newRestaurant = Restaurant::create([
+            ...$validatedData,
+            'user_id' => Auth::id(),
+        ]);
 
         /**
          * @var \Illuminate\Http\UploadedFile $logo
@@ -49,32 +74,6 @@ class RestaurantController extends Controller
         $logo = $request->file('logo')[0];
 
         $menu = $request->file('menu');
-
-        $validatedData = $request->validate([
-            'name' => 'required',
-            'category_id' => ['required', 'exists:categories,id'],
-            'city' => 'required',
-            'location' => 'required',
-            'address' => 'required',
-            'phone' => 'required',
-            'logo' => 'max:1',
-            'menu' => 'max:5',
-            'logo.*' => [
-                'required',
-                File::types(['webp', 'png', 'jpg', 'jpeg'])
-                    ->max(4 * 1024),
-            ],
-            'menu.*' => [
-                'required',
-                File::types(['webp', 'png', 'jpg', 'jpeg'])
-                    ->max(4 * 1024),
-            ],
-        ]);
-
-        $newRestaurant = Restaurant::create([
-            ...$validatedData,
-            'user_id' => Auth::id(),
-        ]);
 
         $logoPath = $logo->store('uploads/restaurants/' . $newRestaurant['id'] . '/logo', ['disk' => 'public']);
         $newRestaurant->update(['logoPath' => $logoPath]);
@@ -105,7 +104,9 @@ class RestaurantController extends Controller
      */
     public function edit(Restaurant $restaurant)
     {
-        //
+        $restaurant->load('menu');
+
+        return Inertia::render('Admin/Restaurant/RestaurantCreate', ['categories' => Category::all(), 'restaurant' => $restaurant]);
     }
 
     /**
