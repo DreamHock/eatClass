@@ -11,10 +11,9 @@
     "prefix": ""
   },
   "aliases": {
-    "@": "resources/js",
-    "components": "@/components",
+    "components": "resources/js/components",
     "utils": "@/lib/utils",
-    "ui": "@/components/ui",
+    "ui": "resources/js/components/ui",
     "lib": "@/lib",
     "hooks": "@/hooks"
   },

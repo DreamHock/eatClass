@@ -20,9 +20,10 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { FC, useEffect } from "react";
+import { FC, useEffect, useState } from "react";
 import { router } from "@inertiajs/react";
 import { toast } from "sonner";
+import { MenuCarouselForm } from "./MenuCarouselForm";
 
 export const RestaurantForm: FC<{ categories: any[]; restaurant: any }> = ({
     categories,
@@ -53,19 +54,21 @@ export const RestaurantForm: FC<{ categories: any[]; restaurant: any }> = ({
         location: z
             .string()
             .nonempty({ message: "Google maps location is required" }),
-        logo: z.custom<FileList>().refine((files) => {
-            return files?.length > 0;
-        }, "Logo is required"),
-        // .refine((files) => {
-        //     return Array.from(files ?? []).every(
-        //         (file) => sizeInMB(file.size) <= MAX_IMAGE_SIZE
-        //     );
-        // }, `The maximum image size is ${MAX_IMAGE_SIZE}MB`)
-        // .refine((files) => {
-        //     return Array.from(files ?? []).every((file) =>
-        //         ACCEPTED_IMAGE_TYPES.includes(file?.type)
-        //     );
-        // }, `Only ${ACCEPTED_IMAGE_TYPES.join(", ")} are allowed`),
+        logo: z
+            .custom<FileList>()
+            .refine((files) => {
+                return files?.length > 0;
+            }, "Logo is required")
+            .refine((files) => {
+                return Array.from(files ?? []).every(
+                    (file) => sizeInMB(file.size) <= MAX_IMAGE_SIZE
+                );
+            }, `The maximum image size is ${MAX_IMAGE_SIZE}MB`)
+            .refine((files) => {
+                return Array.from(files ?? []).every((file) =>
+                    ACCEPTED_IMAGE_TYPES.includes(file?.type)
+                );
+            }, `Only ${ACCEPTED_IMAGE_TYPES.join(", ")} are allowed`),
         menu: z
             .custom<FileList>()
             .refine((files) => {
@@ -93,6 +96,7 @@ export const RestaurantForm: FC<{ categories: any[]; restaurant: any }> = ({
             location: restaurant?.location ?? "",
             logo: restaurant?.logoPath ?? "",
             menu: restaurant?.menu ?? "",
+            category_id: restaurant?.category_id.toString() ?? "",
         },
     });
 
@@ -100,37 +104,47 @@ export const RestaurantForm: FC<{ categories: any[]; restaurant: any }> = ({
     const menuRef = form.register("menu");
 
     function onSubmit(values: z.infer<typeof formSchema>) {
-        router.post(route("admin.restaurants.store"), values, {
-            onSuccess: () => {
-                toast("Restaurant successfully added");
-            },
-            onError: (errors) => {
-                console.log(errors);
+        router.post(
+            restaurant
+                ? route(`admin.restaurants.update`, restaurant.id)
+                : route(`admin.restaurants.store`),
+            { ...values, _method: restaurant ? "put" : "post" },
+            {
+                onSuccess: () => {
+                    toast(
+                        `Restaurant successfully ${
+                            restaurant ? "modified" : "added"
+                        }`
+                    );
+                },
+                onError: (errors) => {
+                    console.log(errors);
 
-                for (const key in errors) {
-                    let formKey = key === "logoPath" ? "logo" : key;
-                    let logoRegex = /^logo./;
-                    let menuRegex = /^menu./;
-                    switch (true) {
-                        case key === "logoPath":
-                            formKey = "logo";
-                            break;
-                        case logoRegex.test(key):
-                            formKey = "logo";
-                            break;
-                        case menuRegex.test(key):
-                            formKey = "menu";
-                            break;
-                        default:
-                            formKey = key;
+                    for (const key in errors) {
+                        let formKey = key === "logoPath" ? "logo" : key;
+                        let logoRegex = /^logo./;
+                        let menuRegex = /^menu./;
+                        switch (true) {
+                            case key === "logoPath":
+                                formKey = "logo";
+                                break;
+                            case logoRegex.test(key):
+                                formKey = "logo";
+                                break;
+                            case menuRegex.test(key):
+                                formKey = "menu";
+                                break;
+                            default:
+                                formKey = key;
+                        }
+                        form.setError(formKey, {
+                            type: "manual",
+                            message: errors[key],
+                        });
                     }
-                    form.setError(formKey, {
-                        type: "manual",
-                        message: errors[key],
-                    });
-                }
-            },
-        });
+                },
+            }
+        );
     }
 
     return (
@@ -271,6 +285,7 @@ export const RestaurantForm: FC<{ categories: any[]; restaurant: any }> = ({
                     name="logo"
                     render={({ field }) => (
                         <FormItem>
+                            {console.log(form.getValues())}
                             <div className="flex gap-2 items-center">
                                 <FormLabel>Logo:</FormLabel>
                                 <FormMessage />
@@ -283,6 +298,27 @@ export const RestaurantForm: FC<{ categories: any[]; restaurant: any }> = ({
                                     {...logoRef}
                                 />
                             </FormControl>
+                            {form.getValues().logo.length > 0 && (
+                                <div className="flex justify-start pl-10">
+                                    <MenuCarouselForm
+                                        images={
+                                            !restaurant
+                                                ? Object.values(
+                                                      form.getValues().logo
+                                                  ).map((logoItem) => {
+                                                      return URL.createObjectURL(
+                                                          logoItem
+                                                      );
+                                                  })
+                                                : [
+                                                      `${route()["t"]["url"]}/${
+                                                          restaurant.logoPath
+                                                      }`,
+                                                  ]
+                                        }
+                                    />
+                                </div>
+                            )}
                         </FormItem>
                     )}
                 />
@@ -291,7 +327,6 @@ export const RestaurantForm: FC<{ categories: any[]; restaurant: any }> = ({
                     name="menu"
                     render={({ field }) => (
                         <FormItem>
-                            {console.log(field)}
                             <div className="flex gap-2 items-center">
                                 <FormLabel>
                                     Menu: import multiple images (up to 4)
@@ -307,6 +342,29 @@ export const RestaurantForm: FC<{ categories: any[]; restaurant: any }> = ({
                                     {...menuRef}
                                 />
                             </FormControl>
+                            {form.getValues().menu.length > 0 && (
+                                <div className="flex justify-start pl-10">
+                                    <MenuCarouselForm
+                                        images={
+                                            !restaurant
+                                                ? Object.values(
+                                                      form.getValues().menu
+                                                  ).map((menuItem) => {
+                                                      return URL.createObjectURL(
+                                                          menuItem
+                                                      );
+                                                  })
+                                                : Object.values(
+                                                      form.getValues().menu
+                                                  ).map((menuItem) => {
+                                                      return `${
+                                                          route()["t"]["url"]
+                                                      }/${menuItem.menuPath}`;
+                                                  })
+                                        }
+                                    />
+                                </div>
+                            )}
                         </FormItem>
                     )}
                 />
