@@ -40,6 +40,14 @@ export default function Authenticated({ auth, children }) {
                                     Restaurants
                                 </NavLink>
                                 <NavLink
+                                    href={route("admin.categories.index")}
+                                    active={route().current(
+                                        "admin.categories.index"
+                                    )}
+                                >
+                                    Categories
+                                </NavLink>
+                                <NavLink
                                     href={route("default-days.create")}
                                     active={route().current(
                                         "default-days.create"

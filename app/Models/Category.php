@@ -9,6 +9,11 @@ class Category extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'category',
+        'imagePath'
+    ];
+
     function restaurants()
     {
         return $this->hasMany(Restaurant::class);
