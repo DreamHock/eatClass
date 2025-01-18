@@ -11,7 +11,6 @@ class Restaurant extends Model
 
     static public $restaurant;
     protected $fillable = [
-        'id',
         'category_id',
         'user_id',
         'name',

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreUpdateRestaurantRequest;
 use App\Models\Category;
 use App\Models\DefaultDay;
 use App\Models\Menu;
@@ -39,10 +40,11 @@ class RestaurantController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, RestaurantService $restaurantService)
+    public function store(StoreUpdateRestaurantRequest $request, RestaurantService $restaurantService)
     {
-
-        $restaurantService->createRestaurant($request);
+        $validated = $request->validated();
+        
+        $restaurantService->createRestaurant($validated);
     }
 
     /**
@@ -66,9 +68,11 @@ class RestaurantController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Restaurant $restaurant, RestaurantService $restaurantService)
+    public function update(StoreUpdateRestaurantRequest $request, Restaurant $restaurant, RestaurantService $restaurantService)
     {
-        $restaurantService->updateRestaurant($request, $restaurant);
+        $validated = $request->validated();
+
+        $restaurantService->updateRestaurant($validated, $restaurant);
     }
 
     /**
