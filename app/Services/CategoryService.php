@@ -5,52 +5,45 @@ namespace App\Services;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 
 class CategoryService
 {
 
 
-    public function createCategory(Request $request): ?Category
+    public function createCategory(array $validated): ?Category
     {
-        $validatedData = $request->validate(
-            [
-                'category' => ['required'],
-                'image' => ['array', 'size:1'], // Ensures exactly one file
-                'image.*' => 'required|mimes:jpg,webp,png,jpeg|max:4096',
-            ],
-            [
-                'image.*.required' => 'A image file is required.',
-                'image.*.mimes' => "The image must be a valid file ('webp', 'png', 'jpg', 'jpeg')",
-            ]
-        );
-
-
         $newCategory = Category::create([
-            ...$validatedData,
-            'imagePath' => $request->file('image')[0]->store('uploads/categories/' . $this->getNextId() . '/image', ['disk' => 'public'])
+            ...$validated,
+            'imagePath' => 'temporal'
+        ]);
+
+        $newCategory->update([
+            'imagePath' => $validated['image'][0]->store('uploads/restaurants/' . $newCategory['id'] . '/image', ['disk' => 'public'])
         ]);
 
         return $newCategory;
     }
 
-    public function updateCategory(Request $request, Category $category)
+    public function updateCategory(array $validated, Category $category)
     {
-        $updatedCategory = $this->deleteCategory($category);
+        File::deleteDirectory(public_path() . '/uploads/categories/' . $category['id']);
 
-        $newCategory = $this->createCategory($request);
-
-        $newCategory->update([
-            'id' => $updatedCategory->id,
-            'created_at' => $updatedCategory->created_at,
+        $category->update([
+            ...$validated,
+            'imagePath' => $validated['image'][0]->store('uploads/categories/' . $category['id'] . '/image', ['disk' => 'public'])
         ]);
     }
 
-    public function deleteCategory(Category $category)
+    public function deleteCategory(Category $category): Category
     {
-        $updatedCategory = $category;
+        $deletedCategory = $category;
+
         $category->delete();
 
-        return $updatedCategory;
+        File::deleteDirectory(public_path() . '/uploads/categories/' . $category['id']);
+
+        return $deletedCategory;
     }
 
     public function getNextId()

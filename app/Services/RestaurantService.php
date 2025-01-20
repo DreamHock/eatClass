@@ -15,7 +15,7 @@ class RestaurantService
 {
 
 
-    public function createRestaurant(array $validated): ?Restaurant
+    public function createRestaurant(array $validated)
     {
 
         $newRestaurant = Restaurant::create([
@@ -39,8 +39,6 @@ class RestaurantService
                 'menuPath' => $file->store('uploads/restaurants/' . $newRestaurant['id'] . '/menu', ['disk' => 'public']),
             ]);
         }
-
-        return $newRestaurant;
     }
 
     public function updateRestaurant(array $validated, Restaurant $restaurant)
@@ -69,9 +67,9 @@ class RestaurantService
     {
         $deleteRestaurant = $restaurant;
 
-        File::deleteDirectory(public_path() . '/uploads/restaurants/' . $restaurant['id']);
-
         $restaurant->delete();
+        
+        File::deleteDirectory(public_path() . '/uploads/restaurants/' . $restaurant['id']);
 
         return $deleteRestaurant;
     }

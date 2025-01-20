@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreUpdateCategoryRequest;
 use App\Models\Category;
 use App\Services\CategoryService;
 use Illuminate\Http\Request;
@@ -34,10 +35,12 @@ class CategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, CategoryService $categoryService)
+    public function store(StoreUpdateCategoryRequest $request, CategoryService $categoryService)
     {
 
-        $categoryService->createCategory($request);
+        $validated = $request->validated();
+
+        $categoryService->createCategory($validated);
     }
 
     /**
@@ -53,17 +56,18 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        $category->load('menu');
 
-        return Inertia::render('Admin/Category/CategoryCreate', ['categories' => Category::all(), 'category' => $category]);
+        return Inertia::render('Admin/Category/CategoryCreate', ['category' => $category]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Category $category, CategoryService $categoryService)
+    public function update(StoreUpdateCategoryRequest $request, Category $category, CategoryService $categoryService)
     {
-        $categoryService->updateCategory($request, $category);
+        $validated = $request->validated();
+
+        $categoryService->updateCategory($validated, $category);
     }
 
     /**

@@ -8,7 +8,7 @@ import { Head } from "@inertiajs/react";
 import { CategoryForm, RestaurantForm } from "./Components/CategoryForm";
 import { Toaster } from "@/components/ui/sonner";
 
-const CategoryCreate = ({ auth }) => {
+const CategoryCreate = ({ auth, category }) => {
     return (
         <>
             <Head title="Create Category" />
@@ -17,7 +17,7 @@ const CategoryCreate = ({ auth }) => {
                     <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                         <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                             <div className="p-6 text-slate-900">
-                                <CategoryForm  />
+                                <CategoryForm  category={category}/>
                             </div>
                         </div>
                     </div>

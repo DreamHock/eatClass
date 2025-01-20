@@ -68,6 +68,10 @@ export const CategoryForm: FC<{ category: any }> = ({ category }) => {
 
     const imageRef = form.register("image");
 
+    useEffect(() => {
+        console.log(category);
+    }, []);
+
     function onSubmit(values: z.infer<typeof formSchema>) {
         // console.log(values);
         // return;
