@@ -7,8 +7,6 @@ import Menu from "./components/Menu";
 import Location from "./components/Location";
 
 const Restaurant = ({ restaurant, defaultDays, menu }) => {
-    // const [restaurant, setRestaurant] = useState(props.restaurant);
-
     useEffect(() => {
         console.log(restaurant);
         console.log(defaultDays);
@@ -16,17 +14,19 @@ const Restaurant = ({ restaurant, defaultDays, menu }) => {
 
     return (
         <Layout>
-            <div className="flex gap-10">
-                <div>
+            <div className="flex flex-col lg:flex-row gap-4 lg:gap-10 lg:px-8 min-h-screen">
+                <div className="w-full lg:w-2/3">
                     <Overview restaurant={restaurant} menu={menu} />
                     <Menu menu={menu}/>
                     <Location restaurant={restaurant} />
                     {/* <OtherRestaurants /> */}
                 </div>
-                <Reservation
-                    restaurant={restaurant}
-                    defaultDays={defaultDays}
-                />
+                <div className="w-full lg:w-1/3 lg:sticky lg:top-4 lg:h-fit">
+                    <Reservation
+                        restaurant={restaurant}
+                        defaultDays={defaultDays}
+                    />
+                </div>
             </div>
         </Layout>
     );

@@ -8,9 +8,7 @@ use App\Http\Controllers\DefaultServiceController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\RestaurantController;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,26 +22,16 @@ use Inertia\Inertia;
 */
 
 
-Route::middleware('auth')->group(function () {
-  Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-  Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-  Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
+Route::middleware('auth')->group(function () {});
 
 
 
 Route::middleware(['auth', 'admin'])->group(function () {
   Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('admin.profile.destroy');
     Route::resource('/restaurants', AdminRestaurantController::class);
-    // ->names([
-    //   'index' => 'admin.restaurants.index',
-    //   'create' => 'admin.restaurants.create',
-    //   'store' => 'admin.restaurants.store',
-    //   'show' => 'admin.restaurants.show',
-    //   'edit' => 'admin.restaurants.edit',
-    //   'update' => 'admin.restaurants.update',
-    //   'destroy' => 'admin.restaurants.destroy',
-    // ]);
     Route::resource('categories', AdminCategoryController::class);
   });
   Route::resource('default-services', DefaultServiceController::class);

@@ -18,40 +18,43 @@ const Calendar = ({ services, setServices, defaultDays, setSelectedDate, selecte
 
     const getHeader = () => {
         return (
-            <div className="header">
+            <div className="header flex items-center justify-between p-2 md:p-4">
                 <div
-                    className="todayButton"
+                    className="todayButton text-sm md:text-base"
                     onClick={() => {
                         setActiveDate(new Date());
                     }}
                 >
                     Today
                 </div>
-                <AiOutlineLeft
-                    className="navIcon"
-                    onClick={() => setActiveDate(addMonths(activeDate, -1))}
-                />
-                <AiOutlineRight
-                    className="navIcon"
-                    onClick={() => setActiveDate(addMonths(activeDate, 1))}
-                />
-                <h2 className="currentMonth">
+                <div className="flex items-center gap-2 md:gap-4">
+                    <AiOutlineLeft
+                        className="navIcon text-lg md:text-xl cursor-pointer"
+                        onClick={() => setActiveDate(addMonths(activeDate, -1))}
+                    />
+                    <AiOutlineRight
+                        className="navIcon text-lg md:text-xl cursor-pointer"
+                        onClick={() => setActiveDate(addMonths(activeDate, 1))}
+                    />
+                </div>
+                <h2 className="currentMonth text-sm md:text-lg font-semibold">
                     {format(activeDate, "MMMM yyyy")}
                 </h2>
             </div>
         );
     };
+
     const getWeekDaysNames = () => {
         const weekStartDate = startOfWeek(activeDate);
         const weekDays = [];
         for (let day = 0; day < 7; day++) {
             weekDays.push(
-                <div className="day weekNames" key={day}>
+                <div className="day weekNames text-xs md:text-sm font-medium" key={day}>
                     {format(addDays(weekStartDate, day), "E")}
                 </div>
             );
         }
-        return <div className="weekContainer">{weekDays}</div>;
+        return <div className="weekContainer grid grid-cols-7 gap-1 md:gap-2 lg:gap-4">{weekDays}</div>;
     };
 
     const generateDatesForCurrentWeek = (date, selectedDate, activeDate) => {
@@ -96,11 +99,11 @@ const Calendar = ({ services, setServices, defaultDays, setSelectedDate, selecte
             currentDate = addDays(currentDate, 7);
         }
 
-        return <div className="weekContainer">{allWeeks}</div>;
+        return <div className="weekContainer grid grid-cols-7 gap-1 md:gap-2 lg:gap-4">{allWeeks}</div>;
     };
 
     return (
-        <section>
+        <section className="w-full">
             {getHeader()}
             {getWeekDaysNames()}
             {getDates()}

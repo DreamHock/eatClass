@@ -94,7 +94,7 @@ export default function Authenticated({ auth, children }) {
                                             Log Out
                                         </Dropdown.Link>
                                         <Dropdown.Link
-                                            href={route("profile.edit")}
+                                            href={route("admin.profile.edit")}
                                             method="get"
                                             as="button"
                                         >
@@ -180,7 +180,7 @@ export default function Authenticated({ auth, children }) {
                         </div>
 
                         <div className="mt-3 space-y-1">
-                            <Dropdown.Link href={route("profile.edit")}>
+                            <Dropdown.Link href={route("admin.profile.edit")}>
                                 Profile
                             </Dropdown.Link>
                             <ResponsiveNavLink

@@ -66,32 +66,32 @@ const Reservation = ({ restaurant, defaultDays }) => {
     };
 
     return (
-        <div>
+        <div className="w-full px-4 lg:px-0">
             {success ? (
-                <div className="p-4 flex flex-col items-center justify-center shadow-md">
-                    <h2 className="text-xl mb-2 font-bold">
+                <div className="p-4 flex flex-col items-center justify-center shadow-md rounded-lg">
+                    <h2 className="text-lg md:text-xl mb-2 font-bold">
                         Successfull Reservation
                     </h2>
-                    <div className="text-md font-bold mb-2">
+                    <div className="text-sm md:text-base font-bold mb-2">
                         Please check your email
                     </div>
                     <a
-                        className=" hover:cursor-pointer text-sky-800 text-md font-bold underline"
+                        className="hover:cursor-pointer text-sky-800 text-sm md:text-base font-bold underline"
                         onClick={() => setSuccess(false)}
                     >
                         Go back
                     </a>
                 </div>
             ) : (
-                <div>
-                    <h2 className="text-yellow-800 text-2xl">
+                <div className="w-full">
+                    <h2 className="text-xl md:text-2xl text-yellow-800 mb-4">
                         Book a table
                     </h2>
 
                     <div
                         className={`${
                             isOpen && "hidden"
-                        } p-4 border-[2px] shadow-lg w-[400px] flex flex-col font-bold rounded`}
+                        } p-3 md:p-4 border-[2px] shadow-lg w-full flex flex-col font-bold rounded`}
                     >
                         <>
                             <Calendar
@@ -107,9 +107,7 @@ const Reservation = ({ restaurant, defaultDays }) => {
                                 services={dayServices}
                             />
                             <DurationInterval
-                                completeSelectedService={
-                                    completeSelectedService
-                                }
+                                completeSelectedService={completeSelectedService}
                                 setData={setData}
                                 dayServices={dayServices}
                             />
@@ -117,7 +115,7 @@ const Reservation = ({ restaurant, defaultDays }) => {
                                 <NbrPersone setData={setData} data={data} />
                                 <PrimaryButton
                                     onClick={toggleUserInfoPopUp}
-                                    className="w-1/2 h-1/2 self-end"
+                                    className="w-1/2 h-1/2 self-end text-sm md:text-base"
                                 >
                                     Next
                                 </PrimaryButton>
@@ -127,7 +125,7 @@ const Reservation = ({ restaurant, defaultDays }) => {
                     <div
                         className={`${
                             !isOpen && "hidden"
-                        } p-4 border-[2px] shadow-lg w-[400px] flex flex-col font-bold rounded`}
+                        } p-3 md:p-4 border-[2px] shadow-lg w-full flex flex-col font-bold rounded`}
                     >
                         <UserInfoPopUp
                             processing={processing}
