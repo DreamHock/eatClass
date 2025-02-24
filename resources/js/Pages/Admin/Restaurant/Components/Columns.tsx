@@ -23,17 +23,8 @@ type Category = {
 
 type Restaurant = {
     id: number;
-    // category_id: number;
-    // user_id: number;
-    // phone: string;
     name: string;
-    // address: string;
     city: string;
-    // location: string;
-    // logoPath: string;
-    // latitude: number;
-    // longitude: number;
-    // created_at: string;
     updated_at: string;
     category_id: number;
     category: Category;
@@ -91,14 +82,14 @@ export const columns: ColumnDef<Restaurant>[] = [
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
                         <DropdownMenuItem>
                             <Link
-                                method="delete"
+                                method="get"
                                 href={route(
-                                    "restaurants.destroy",
+                                    "admin.default-days.create",
                                     restaurant.id
                                 )}
                                 only={["restaurants"]}
                             >
-                                Manage restaurant
+                                Manage the week
                             </Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem>

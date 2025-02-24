@@ -718,6 +718,18 @@
   resolved "https://registry.yarnpkg.com/@tanstack/virtual-core/-/virtual-core-3.11.2.tgz#00409e743ac4eea9afe5b7708594d5fcebb00212"
   integrity sha512-vTtpNt7mKCiZ1pwU9hfKPhpdVO2sVzFQsxoVBGtOSHxlrRRzYr8iQ2TlwbAcRYCcEiZ9ECAM8kBzH0v2+VzfKw==
 
+"@types/geojson@*":
+  version "7946.0.16"
+  resolved "https://registry.yarnpkg.com/@types/geojson/-/geojson-7946.0.16.tgz#8ebe53d69efada7044454e3305c19017d97ced2a"
+  integrity sha512-6C8nqWur3j98U6+lXDfTUWIfgvZU+EumvpHKcYjujKH7woYyLj2sUmff0tRhrqM7BohUw7Pz3ZB1jj2gW9Fvmg==
+
+"@types/leaflet@^1.9.16":
+  version "1.9.16"
+  resolved "https://registry.yarnpkg.com/@types/leaflet/-/leaflet-1.9.16.tgz#3e3abc103e106523cde01625057e2294f332ec3b"
+  integrity sha512-wzZoyySUxkgMZ0ihJ7IaUIblG8Rdc8AbbZKLneyn+QjYsj5q1QU7TEKYqwTr10BGSzY5LI7tJk9Ifo+mEjdFRw==
+  dependencies:
+    "@types/geojson" "*"
+
 "@types/react-dom@^19.0.2":
   version "19.0.2"
   resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-19.0.2.tgz#ad21f9a1ee881817995fd3f7fd33659c87e7b1b7"
@@ -1271,6 +1283,11 @@ hasown@^2.0.2:
   integrity sha512-0hJU9SCPvmMzIBdZFqNPXWa6dqh7WdH0cII9y+CyS8rG3nL48Bclra9HmKhVVUHyPWNH5Y7xDwAB7bfgSjkUMQ==
   dependencies:
     function-bind "^1.1.2"
+
+htmx.org@^1.9.12:
+  version "1.9.12"
+  resolved "https://registry.yarnpkg.com/htmx.org/-/htmx.org-1.9.12.tgz#1c5bc7fb4d3eb4e8c0d72323dc774a6b9b66addc"
+  integrity sha512-VZAohXyF7xPGS52IM8d1T1283y+X4D+Owf3qY1NZ9RuBypyu9l8cGsxUMAG5fEAb/DhT7rDoJ9Hpu5/HxFD3cw==
 
 is-binary-path@~2.1.0:
   version "2.1.0"

@@ -47,14 +47,6 @@ export default function Authenticated({ auth, children }) {
                                 >
                                     Categories
                                 </NavLink>
-                                <NavLink
-                                    href={route("default-days.create")}
-                                    active={route().current(
-                                        "default-days.create"
-                                    )}
-                                >
-                                    Add Week
-                                </NavLink>
                             </div>
                         </div>
 
@@ -160,12 +152,6 @@ export default function Authenticated({ auth, children }) {
                             active={route().current("admin.restaurants.index")}
                         >
                             Restaurants
-                        </ResponsiveNavLink>
-                        <ResponsiveNavLink
-                            href={route("default-days.create")}
-                            active={route().current("default-days.create")}
-                        >
-                            Default week
                         </ResponsiveNavLink>
                     </div>
 

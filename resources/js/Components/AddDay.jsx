@@ -4,7 +4,10 @@ import { useState, useEffect } from "react";
 import ServiceInformations from "./ServiceInformations";
 import PrimaryButton from "./PrimaryButton";
 
-const AddDay = ({ dayy, editable }) => {
+const AddDay = ({ dayy, editable, restaurant }) => {
+    useEffect(() => {
+        console.log(dayy);
+    }, []);
     const [day, setDay] = useState(dayy ? dayy.dayName : "day");
     const { errors } = usePage().props;
     const [services, setServices] = useState(
@@ -21,10 +24,6 @@ const AddDay = ({ dayy, editable }) => {
               ]
     );
     const [submitButton, setSubmitButton] = useState("");
-
-    useEffect(() => {
-        console.log(errors);
-    }, [errors]);
 
     const addService = () => {
         const newService = {
@@ -63,9 +62,9 @@ const AddDay = ({ dayy, editable }) => {
         e.preventDefault();
         if (submitButton === "add") {
             router.post(
-                "/defaultDays",
+                route("admin.default-days.store", restaurant.id),
                 {
-                    restaurant_id: 1,
+                    restaurant_id: restaurant.id,
                     day: day,
                     services: services.map((service) => service),
                 },
@@ -74,12 +73,20 @@ const AddDay = ({ dayy, editable }) => {
                 }
             );
         } else if (submitButton === "delete") {
-            router.delete(`/defaultDays/${dayy.id}`);
+            router.delete(
+                route("admin.default-days.destroy", {
+                    restaurant: restaurant.id,
+                    default_day: dayy.id,
+                })
+            );
         } else if (submitButton === "edit") {
             router.put(
-                `/defaultDays/${dayy.id}`,
+                route("admin.default-days.update", {
+                    restaurant: restaurant.id,
+                    default_day: dayy.id,
+                }),
                 {
-                    restaurant_id: 1,
+                    restaurant_id: restaurant.id,
                     day: day,
                     services: services.map((service) => service),
                 },
@@ -152,7 +159,7 @@ const AddDay = ({ dayy, editable }) => {
                     <PrimaryButton
                         onClick={() => setSubmitButton("delete")}
                         type="submit"
-                        color='red'
+                        color="red"
                         className="flex-1 font-medium rounded text-sm"
                     >
                         Delete

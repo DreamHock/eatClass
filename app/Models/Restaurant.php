@@ -36,7 +36,7 @@ class Restaurant extends Model
         return $this->hasMany(Service::class);
     }
 
-    function DefaultDays()
+    function defaultDays()
     {
         return $this->hasMany(DefaultDay::class);
     }

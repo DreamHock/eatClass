@@ -37,13 +37,12 @@ class DefaultServiceController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public static function store($request, $idLastItem)
+    public static function store($validated, $idLastItem)
     {
 
-        $services = $request['services'];
+        $services = $validated['services'];
         foreach ($services as $service) {
-            $ds = new DefaultService;
-            $ds->create([
+            DefaultService::create([
                 'service' => $service['service'],
                 'from' => $service['from'],
                 'to' => $service['to'],
@@ -80,7 +79,5 @@ class DefaultServiceController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(DefaultService $defaultService)
-    {
-    }
+    public function destroy(DefaultService $defaultService) {}
 }
