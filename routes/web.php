@@ -9,12 +9,6 @@ use App\Http\Controllers\ExternalApiController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\RestaurantController;
-<<<<<<< Updated upstream
-=======
-use App\Models\DefaultDay;
-use App\Models\Restaurant;
-use Illuminate\Support\Facades\Auth;
->>>>>>> Stashed changes
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -30,17 +24,16 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::middleware('auth')->group(function () {});
+Route::middleware('auth')->group(function () {});
+
 
 
 Route::middleware(['auth', 'admin'])->group(function () {
   Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
-<<<<<<< Updated upstream
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('admin.profile.destroy');
     Route::resource('/restaurants', AdminRestaurantController::class);
-=======
->>>>>>> Stashed changes
     Route::resource('categories', AdminCategoryController::class);
     Route::resource('restaurants', AdminRestaurantController::class);
     Route::group(['prefix' => 'restaurants'], function () {
@@ -68,16 +61,11 @@ Route::resource('/restaurants', RestaurantController::class);
 
 
 Route::post('/reservations', [ReservationController::class, 'store']);
-Route::get('/', [CategoryController::class, 'categories']);
+Route::get('/', [CategoryController::class, 'categories'])->name('category.index');
 
 Route::get('/mail', function () {
   $createdReservation = session('createdReservation');
   return view('emails.reserveInformation', ['createdReservation' => $createdReservation]);
 })->name('mail');
-
-// Route::post('/fetchMap', [ExternalApiController::class, 'fetchMap'])->name('dynamic-map');
-Route::post('/fetchMap', function() {
-  dd('hi');
-})->name('dynamic-map');
 
 require __DIR__ . '/auth.php';
