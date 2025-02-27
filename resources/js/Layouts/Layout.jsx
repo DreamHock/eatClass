@@ -1,17 +1,41 @@
 import { Link } from "@inertiajs/react";
 import { useState } from "react";
-import { AiOutlineSearch, AiOutlineFilter, AiOutlineHeart, AiOutlineUser } from "react-icons/ai";
+import {
+    AiOutlineSearch,
+    AiOutlineFilter,
+    AiOutlineHeart,
+    AiOutlineUser,
+} from "react-icons/ai";
 import { BiRestaurant } from "react-icons/bi";
 
-const Layout = ({ children, showSearch = false }) => {
-    const [showFilters, setShowFilters] = useState(false);
+const Layout = ({ children, showSearch = false, categories = [] }) => {
+    const [showFilters, setShowFilters] = useState(true);
     const [searchTerm, setSearchTerm] = useState("");
+    const [selectedCategory, setSelectedCategory] = useState("");
+    // Add state for rating filter
+    const [selectedRating, setSelectedRating] = useState("");
+                        
+    // Add rating filter handler
+    const handleRatingChange = (e) => {
+        const rating = e.target.value;
+        setSelectedRating(rating);
+        window.dispatchEvent(new CustomEvent("ratingFilter", { detail: rating }));
+    };
+
+    // Add category filter handler
+    const handleCategoryChange = (e) => {
+        const categoryId = e.target.value;
+        setSelectedCategory(categoryId);
+        window.dispatchEvent(
+            new CustomEvent("categoryFilter", { detail: categoryId })
+        );
+    };
 
     // Add search handler that can be passed to children
     const handleSearch = (value) => {
         setSearchTerm(value);
         // Emit search event that Home component can listen to
-        window.dispatchEvent(new CustomEvent('search', { detail: value }));
+        window.dispatchEvent(new CustomEvent("search", { detail: value }));
     };
 
     return (
@@ -23,7 +47,9 @@ const Layout = ({ children, showSearch = false }) => {
                             <span className="text-4xl font-bold text-yellow-500 after:content-[''] after:inline-block after:bg-yellow-500 after:w-0.5 after:h-8 after:ml-1">
                                 eat
                             </span>
-                            <span className="text-2xl text-gray-700 ml-1">class</span>
+                            <span className="text-2xl text-gray-700 ml-1">
+                                class
+                            </span>
                         </div>
                     </Link>
 
@@ -33,7 +59,9 @@ const Layout = ({ children, showSearch = false }) => {
                                 <input
                                     type="text"
                                     value={searchTerm}
-                                    onChange={(e) => handleSearch(e.target.value)}
+                                    onChange={(e) =>
+                                        handleSearch(e.target.value)
+                                    }
                                     placeholder="Search restaurants, cuisines, or locations..."
                                     className="w-full px-4 py-2 rounded-full border focus:outline-none focus:border-yellow-500"
                                 />
@@ -44,18 +72,30 @@ const Layout = ({ children, showSearch = false }) => {
 
                     <div className="flex items-center gap-6">
                         {showSearch && (
-                            <button 
+                            <button
                                 onClick={() => setShowFilters(!showFilters)}
-                                className="flex items-center gap-1 text-gray-600 hover:text-yellow-500"
+                                className={`flex items-center gap-1 ${
+                                    showFilters
+                                        ? "text-yellow-500"
+                                        : "text-gray-600 hover:text-yellow-500"
+                                }`}
                             >
                                 <AiOutlineFilter className="text-xl" />
-                                <span className="hidden md:inline">Filters</span>
+                                <span className="hidden md:inline">
+                                    Filters
+                                </span>
                             </button>
                         )}
-                        <Link href="/favorites" className="text-gray-600 hover:text-yellow-500">
+                        <Link
+                            href="/favorites"
+                            className="text-gray-600 hover:text-yellow-500"
+                        >
                             <AiOutlineHeart className="text-xl" />
                         </Link>
-                        <Link href="/profile" className="text-gray-600 hover:text-yellow-500">
+                        <Link
+                            href="/profile"
+                            className="text-gray-600 hover:text-yellow-500"
+                        >
                             <AiOutlineUser className="text-xl" />
                         </Link>
                     </div>
@@ -81,12 +121,18 @@ const Layout = ({ children, showSearch = false }) => {
             {/* Filters - Only show when showSearch is true */}
             {showSearch && showFilters && (
                 <div className="bg-white shadow-md p-4 lg:p-6">
-                    <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4">
-                        <select className="px-3 py-2 border rounded-lg focus:outline-none focus:border-yellow-500">
-                            <option>Cuisine Type</option>
-                            <option>Italian</option>
-                            <option>Japanese</option>
-                            <option>Mexican</option>
+                    <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-3 gap-4">
+                        <select
+                            className="px-3 py-2 border rounded-lg focus:outline-none focus:border-yellow-500"
+                            value={selectedCategory}
+                            onChange={handleCategoryChange}
+                        >
+                            <option value="">All Cuisines</option>
+                            {categories.map((category) => (
+                                <option key={category.id} value={category.id}>
+                                    {category.category}
+                                </option>
+                            ))}
                         </select>
                         <select className="px-3 py-2 border rounded-lg focus:outline-none focus:border-yellow-500">
                             <option>Price Range</option>
@@ -94,17 +140,16 @@ const Layout = ({ children, showSearch = false }) => {
                             <option>$$</option>
                             <option>$$$</option>
                         </select>
-                        <select className="px-3 py-2 border rounded-lg focus:outline-none focus:border-yellow-500">
-                            <option>Rating</option>
-                            <option>4+ Stars</option>
-                            <option>3+ Stars</option>
-                            <option>2+ Stars</option>
-                        </select>
-                        <select className="px-3 py-2 border rounded-lg focus:outline-none focus:border-yellow-500">
-                            <option>Distance</option>
-                            <option>Under 1 km</option>
-                            <option>1-5 km</option>
-                            <option>5-10 km</option>
+                        
+                        <select 
+                            className="px-3 py-2 border rounded-lg focus:outline-none focus:border-yellow-500"
+                            value={selectedRating}
+                            onChange={handleRatingChange}
+                        >
+                            <option value="">All Ratings</option>
+                            <option value="4">4+ Stars</option>
+                            <option value="3">3+ Stars</option>
+                            <option value="2">2+ Stars</option>
                         </select>
                     </div>
                 </div>
@@ -121,33 +166,57 @@ const Layout = ({ children, showSearch = false }) => {
                         <div>
                             <h3 className="font-semibold mb-3">About</h3>
                             <ul className="space-y-2 text-sm text-gray-600">
-                                <li><Link href="/about">About Us</Link></li>
-                                <li><Link href="/careers">Careers</Link></li>
-                                <li><Link href="/blog">Blog</Link></li>
+                                <li>
+                                    <Link href="/about">About Us</Link>
+                                </li>
+                                <li>
+                                    <Link href="/careers">Careers</Link>
+                                </li>
+                                <li>
+                                    <Link href="/blog">Blog</Link>
+                                </li>
                             </ul>
                         </div>
                         <div>
                             <h3 className="font-semibold mb-3">Support</h3>
                             <ul className="space-y-2 text-sm text-gray-600">
-                                <li><Link href="/help">Help Center</Link></li>
-                                <li><Link href="/contact">Contact Us</Link></li>
-                                <li><Link href="/faq">FAQ</Link></li>
+                                <li>
+                                    <Link href="/help">Help Center</Link>
+                                </li>
+                                <li>
+                                    <Link href="/contact">Contact Us</Link>
+                                </li>
+                                <li>
+                                    <Link href="/faq">FAQ</Link>
+                                </li>
                             </ul>
                         </div>
                         <div>
                             <h3 className="font-semibold mb-3">Legal</h3>
                             <ul className="space-y-2 text-sm text-gray-600">
-                                <li><Link href="/terms">Terms of Service</Link></li>
-                                <li><Link href="/privacy">Privacy Policy</Link></li>
-                                <li><Link href="/cookies">Cookie Policy</Link></li>
+                                <li>
+                                    <Link href="/terms">Terms of Service</Link>
+                                </li>
+                                <li>
+                                    <Link href="/privacy">Privacy Policy</Link>
+                                </li>
+                                <li>
+                                    <Link href="/cookies">Cookie Policy</Link>
+                                </li>
                             </ul>
                         </div>
                         <div>
                             <h3 className="font-semibold mb-3">Follow Us</h3>
                             <ul className="space-y-2 text-sm text-gray-600">
-                                <li><Link href="#">Facebook</Link></li>
-                                <li><Link href="#">Twitter</Link></li>
-                                <li><Link href="#">Instagram</Link></li>
+                                <li>
+                                    <Link href="#">Facebook</Link>
+                                </li>
+                                <li>
+                                    <Link href="#">Twitter</Link>
+                                </li>
+                                <li>
+                                    <Link href="#">Instagram</Link>
+                                </li>
                             </ul>
                         </div>
                     </div>

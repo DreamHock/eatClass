@@ -23,6 +23,8 @@ return new class extends Migration
             $table->string('logoPath')->default('');
             $table->double('latitude')->nullable();
             $table->double('longitude')->nullable();
+            $table->decimal('average_rating', 3, 2)->default(0.00); // Stores rating from 0.00 to 5.00
+            $table->integer('rating_count')->default(0); // Stores the number of ratings
             $table->timestamps();
         });
     }

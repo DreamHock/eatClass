@@ -61,7 +61,7 @@ Route::resource('/restaurants', RestaurantController::class);
 
 
 Route::post('/reservations', [ReservationController::class, 'store']);
-Route::get('/', [CategoryController::class, 'categories'])->name('category.index');
+Route::get('/', [CategoryController::class, 'index'])->name('category.index');
 
 Route::get('/mail', function () {
   $createdReservation = session('createdReservation');

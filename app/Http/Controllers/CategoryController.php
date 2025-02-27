@@ -4,26 +4,37 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Restaurant;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
+use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
-    function index(Request $request)
+    public function index(Request $request)
     {
-        $allCategories = Category::with('restaurants')->get();
-        return Inertia::render('Home', ['categories' => $allCategories]);
-
+        $query = $request->input('query');
+        $categoryId = $request->input('category');
+        $rating = $request->input('rating');
+    
+        $allCategories = Category::all();
+        $allRestaurants = Restaurant::query()
+            ->when($query, function ($q) use ($query) {
+                $q->where('name', 'like', "%{$query}%")
+                    ->orWhere('address', 'like', "%{$query}%");
+            })
+            ->when($categoryId, function ($q) use ($categoryId) {
+                $q->where('category_id', $categoryId);
+            })
+            ->when($rating, function ($q) use ($rating) {
+                $q->where('average_rating', '>=', $rating);
+            })
+            ->with('category')
+            ->get();
+    
         return Inertia::render('Home', [
-            'categories' => Category::query()->when(
-                $search,
-                fn($query) =>
-                $query->where('category', 'LIKE', "%{$search}%")
-                    ->orWhere('category.restaurant.name', 'LIKE', "%{$search}%")
-                    ->orWhere('category.restaurant.adresse', 'LIKE', "%{$search}%")
-            )->orderByDesc('created_at')->paginate(10)->withQueryString()
+            'categories' => $allCategories,
+            'restaurants' => $allRestaurants
         ]);
     }
 }
+
 
