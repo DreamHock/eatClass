@@ -13,7 +13,8 @@ class DefaultService extends Model
         'default_day_id',
         'from',
         'to',
-        'interval'
+        'interval',
+        'active'
     ];
 
     function defaultDay()

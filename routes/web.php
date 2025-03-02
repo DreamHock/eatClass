@@ -51,10 +51,12 @@ Route::middleware(['auth', 'admin'])->group(function () {
         [AdminRestaurantController::class, 'defaultDayUpdate']
       )
         ->name('default-days.update');
+      Route::get('/{restaurant}/special-services', [AdminRestaurantController::class, 'specialServicesCreate'])
+        ->name('special-services.create');
+      Route::post('/{restaurant}/special-services', [AdminRestaurantController::class, 'specialServicesStore'])
+        ->name('special-services.store');
     });
   });
-  // Route::resource('default-days', DefaultDayController::class);
-  // Route::resource('default-services', DefaultServiceController::class);
 });
 
 Route::resource('/restaurants', RestaurantController::class);

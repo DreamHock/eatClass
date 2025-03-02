@@ -121,7 +121,7 @@ const Layout = ({ children, showSearch = false, categories = [] }) => {
             {/* Filters - Only show when showSearch is true */}
             {showSearch && showFilters && (
                 <div className="bg-white shadow-md p-4 lg:p-6">
-                    <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-3 gap-4">
+                    <div className="max-w-7xl mx-auto grid grid-cols-2 gap-4">
                         <select
                             className="px-3 py-2 border rounded-lg focus:outline-none focus:border-yellow-500"
                             value={selectedCategory}
@@ -134,13 +134,6 @@ const Layout = ({ children, showSearch = false, categories = [] }) => {
                                 </option>
                             ))}
                         </select>
-                        <select className="px-3 py-2 border rounded-lg focus:outline-none focus:border-yellow-500">
-                            <option>Price Range</option>
-                            <option>$</option>
-                            <option>$$</option>
-                            <option>$$$</option>
-                        </select>
-                        
                         <select 
                             className="px-3 py-2 border rounded-lg focus:outline-none focus:border-yellow-500"
                             value={selectedRating}

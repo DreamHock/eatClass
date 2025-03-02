@@ -16,6 +16,11 @@ import "../../css/calendar.css";
 const Calendar = ({ services, setServices, defaultDays, setSelectedDate, selectedDate }) => {
     const [activeDate, setActiveDate] = useState(new Date());
 
+    useEffect(()=>{
+        console.log("default days :", defaultDays)
+        console.log("services :",services)
+    }, [])
+
     const getHeader = () => {
         return (
             <div className="header flex items-center justify-between p-2 md:p-4">

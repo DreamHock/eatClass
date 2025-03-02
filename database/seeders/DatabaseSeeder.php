@@ -22,7 +22,8 @@ class DatabaseSeeder extends Seeder
         $this->call([
             CategorySeeder::class,
             RestaurantSeeder::class,
-            ServiceSeeder::class,
+            DefaultDaySeeder::class,
+            ServiceSeeder::class
         ]);
     }
 }

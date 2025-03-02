@@ -10,6 +10,7 @@ use App\Models\Category;
 use App\Models\DefaultDay;
 use App\Models\Menu;
 use App\Models\Restaurant;
+use App\Models\Service;
 use App\Services\DefaultDayService;
 use App\Services\RestaurantService;
 use Illuminate\Http\Request;
@@ -129,5 +130,42 @@ class RestaurantController extends Controller
     public function defaultDayDestroy(Restaurant $restaurant, DefaultDay $defaultDay)
     {
         $defaultDay->delete();
+    }
+
+    public function specialServicesCreate(Restaurant $restaurant)
+    {
+        $services = Service::where('restaurant_id', $restaurant->id)->get();
+
+        return Inertia::render('Admin/Restaurant/SpecialServices', [
+            'services' => $services,
+            'restaurant' => $restaurant->only(['id', 'name'])
+        ]);
+    }
+
+    public function specialServicesStore(Request $request, Restaurant $restaurant)
+    {
+        $validated = $request->validate([
+            'selectedDates' => 'required|array',
+            'services' => 'required|array',
+            'services.*.service' => 'required|string',
+            'services.*.from' => 'required|string',
+            'services.*.to' => 'required|string',
+            'services.*.interval' => 'required|integer',
+        ]);
+
+        foreach ($validated['selectedDates'] as $date) {
+            foreach ($validated['services'] as $service) {
+                Service::create([
+                    'restaurant_id' => $restaurant->id,
+                    'service' => $service['service'],
+                    'from' => $service['from'],
+                    'to' => $service['to'],
+                    'interval' => $service['interval'],
+                    'date' => $date,
+                ]);
+            }
+        }
+
+        return redirect()->back()->with('success', 'Special services created successfully');
     }
 }

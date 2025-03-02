@@ -14,12 +14,13 @@ class CategoryController extends Controller
         $query = $request->input('query');
         $categoryId = $request->input('category');
         $rating = $request->input('rating');
-    
+
         $allCategories = Category::all();
         $allRestaurants = Restaurant::query()
             ->when($query, function ($q) use ($query) {
                 $q->where('name', 'like', "%{$query}%")
-                    ->orWhere('address', 'like', "%{$query}%");
+                    ->orWhere('address', 'like', "%{$query}%")
+                    ->orWhere('city', 'like', "%{$query}%");
             })
             ->when($categoryId, function ($q) use ($categoryId) {
                 $q->where('category_id', $categoryId);
@@ -29,12 +30,10 @@ class CategoryController extends Controller
             })
             ->with('category')
             ->get();
-    
+
         return Inertia::render('Home', [
             'categories' => $allCategories,
             'restaurants' => $allRestaurants
         ]);
     }
 }
-
-

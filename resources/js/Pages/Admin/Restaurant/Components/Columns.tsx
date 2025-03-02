@@ -96,6 +96,18 @@ export const columns: ColumnDef<Restaurant>[] = [
                             <Link
                                 method="get"
                                 href={route(
+                                    "admin.special-services.create",
+                                    restaurant.id
+                                )}
+                                only={["restaurants"]}
+                            >
+                                Manage special days
+                            </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
+                            <Link
+                                method="get"
+                                href={route(
                                     "admin.restaurants.show",
                                     restaurant.id
                                 )}
