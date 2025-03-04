@@ -11,6 +11,7 @@ use App\Models\DefaultDay;
 use App\Models\Menu;
 use App\Models\Restaurant;
 use App\Models\Service;
+use App\Models\SpecialDay;
 use App\Services\DefaultDayService;
 use App\Services\RestaurantService;
 use Illuminate\Http\Request;
@@ -132,17 +133,17 @@ class RestaurantController extends Controller
         $defaultDay->delete();
     }
 
-    public function specialServicesCreate(Restaurant $restaurant)
+    public function specialDaysCreate(Restaurant $restaurant)
     {
-        $services = Service::where('restaurant_id', $restaurant->id)->get();
+        $specialDays = SpecialDay::with('services')->where('restaurant_id', '=', $restaurant->id)->get();
 
-        return Inertia::render('Admin/Restaurant/SpecialServices', [
-            'services' => $services,
+        return Inertia::render('Admin/Restaurant/SpecialDays', [
+            'specialDays' => $specialDays,
             'restaurant' => $restaurant->only(['id', 'name'])
         ]);
     }
 
-    public function specialServicesStore(Request $request, Restaurant $restaurant)
+    public function specialDaysStore(Request $request, Restaurant $restaurant)
     {
         $validated = $request->validate([
             'selectedDates' => 'required|array',
@@ -154,9 +155,17 @@ class RestaurantController extends Controller
         ]);
 
         foreach ($validated['selectedDates'] as $date) {
+            // Create a special day for each selected date
+            $specialDay = SpecialDay::create([
+                'restaurant_id' => $restaurant->id,
+                'specialDate' => $date,
+            ]);
+
+            // Create services for this special day
             foreach ($validated['services'] as $service) {
                 Service::create([
                     'restaurant_id' => $restaurant->id,
+                    'special_day_id' => $specialDay->id,
                     'service' => $service['service'],
                     'from' => $service['from'],
                     'to' => $service['to'],
@@ -166,6 +175,59 @@ class RestaurantController extends Controller
             }
         }
 
-        return redirect()->back()->with('success', 'Special services created successfully');
+        return redirect()->back()->with('success', 'Special days created successfully');
+    }
+
+    public function specialDayUpdate(Request $request, Restaurant $restaurant, SpecialDay $specialDay)
+    {
+        $validated = $request->validate([
+            'specialDate' => 'required|date',
+            'services' => 'required|array',
+            'services.*.id' => 'sometimes|exists:services,id',
+            'services.*.service' => 'required|string',
+            'services.*.from' => 'required|string',
+            'services.*.to' => 'required|string',
+            'services.*.interval' => 'required|integer',
+        ]);
+
+        // Update special day date
+        $specialDay->update([
+            'specialDate' => $validated['specialDate'],
+        ]);
+
+        // Update or create services
+        foreach ($validated['services'] as $serviceData) {
+            if (isset($serviceData['id'])) {
+                // Update existing service
+                Service::where('id', $serviceData['id'])->update([
+                    'service' => $serviceData['service'],
+                    'from' => $serviceData['from'],
+                    'to' => $serviceData['to'],
+                    'interval' => $serviceData['interval'],
+                    'date' => $validated['specialDate'],
+                ]);
+            } else {
+                // Create new service
+                Service::create([
+                    'restaurant_id' => $restaurant->id,
+                    'special_day_id' => $specialDay->id,
+                    'service' => $serviceData['service'],
+                    'from' => $serviceData['from'],
+                    'to' => $serviceData['to'],
+                    'interval' => $serviceData['interval'],
+                    'date' => $validated['specialDate'],
+                ]);
+            }
+        }
+
+        return redirect()->back()->with('success', 'Special day updated successfully');
+    }
+
+    public function specialDayDestroy(Restaurant $restaurant, SpecialDay $specialDay)
+    {
+        // This will also delete related services due to cascading
+        $specialDay->delete();
+
+        return redirect()->back()->with('success', 'Special day deleted successfully');
     }
 }

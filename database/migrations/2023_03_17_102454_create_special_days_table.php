@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('default_days', function (Blueprint $table) {
+        Schema::create('special_days', function (Blueprint $table) {
             $table->id();
             $table->foreignId('restaurant_id')->constrained('restaurants')
                 ->cascadeOnDelete()->cascadeOnUpdate();
-            $table->string('dayName');
+            $table->date('specialDate');
             $table->timestamps();
         });
     }
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('default_days');
+        Schema::dropIfExists('special_days');
     }
 };

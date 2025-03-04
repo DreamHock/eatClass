@@ -16,6 +16,9 @@ return new class extends Migration
             $table->foreignId('restaurant_id')->constrained('restaurants')
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();
+            $table->foreignId('special_day_id')->nullable()->constrained('special_days')
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
             $table->string('service');
             $table->date('date');
             $table->string('from');

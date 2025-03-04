@@ -10,6 +10,16 @@ class Service extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'restaurant_id',
+        'special_day_id',
+        'service',
+        'from',
+        'to',
+        'interval',
+        'date',
+    ];
+
     function restaurant()
     {
         return $this->belongsTo(Restaurant::class);
@@ -20,4 +30,8 @@ class Service extends Model
         return $this->morphMany(Reservation::class, 'reservable');
     }
 
+    public function specialDay()
+    {
+        return $this->belongsTo(SpecialDay::class);
+    }
 }

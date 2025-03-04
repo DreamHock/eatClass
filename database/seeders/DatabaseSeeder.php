@@ -23,7 +23,8 @@ class DatabaseSeeder extends Seeder
             CategorySeeder::class,
             RestaurantSeeder::class,
             DefaultDaySeeder::class,
-            ServiceSeeder::class
+            // ServiceSeeder::class
+            SpecialDaySeeder::class
         ]);
     }
 }
