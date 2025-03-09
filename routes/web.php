@@ -51,10 +51,20 @@ Route::middleware(['auth', 'admin'])->group(function () {
         [AdminRestaurantController::class, 'defaultDayUpdate']
       )
         ->name('default-days.update');
-      Route::get('/{restaurant}/special-services', [AdminRestaurantController::class, 'specialServicesCreate'])
-        ->name('special-services.create');
-      Route::post('/{restaurant}/special-services', [AdminRestaurantController::class, 'specialServicesStore'])
-        ->name('special-services.store');
+      Route::get('/{restaurant}/special-days', [AdminRestaurantController::class, 'specialDayCreate'])
+        ->name('special-days.create');
+      Route::post('/{restaurant}/special-days', [AdminRestaurantController::class, 'specialDayStore'])
+        ->name('special-days.store');
+      Route::delete(
+        '/{restaurant}/special-days/{special_day}',
+        [AdminRestaurantController::class, 'specialDayDestroy']
+      )
+        ->name('special-days.destroy');
+      Route::put(
+        '/{restaurant}/special-days/{special_day}',
+        [AdminRestaurantController::class, 'specialDayUpdate']
+      )
+        ->name('special-days.update');
     });
   });
 });

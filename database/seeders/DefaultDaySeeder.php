@@ -12,7 +12,7 @@ class DefaultDaySeeder extends Seeder
     public function run(): void
     {
         $restaurants = Restaurant::all();
-        $days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Saturday'];
+        $days = ['monday', 'tuesday', 'wednesday', 'thursday', 'saturday'];
         
         foreach ($restaurants as $restaurant) {
             foreach ($days as $day) {

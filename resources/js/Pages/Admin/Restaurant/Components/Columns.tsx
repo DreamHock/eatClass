@@ -96,7 +96,7 @@ export const columns: ColumnDef<Restaurant>[] = [
                             <Link
                                 method="get"
                                 href={route(
-                                    "admin.special-services.create",
+                                    "admin.special-days.create",
                                     restaurant.id
                                 )}
                                 only={["restaurants"]}

@@ -3,21 +3,18 @@ import { useEffect } from "react";
 import AddDay from "../Components/AddDay";
 
 const AddWeek = ({ defaultDays, auth, restaurant }) => {
-    useEffect(() => {
-        console.log(restaurant);
-    }, [defaultDays]);
 
     return (
         <Authenticated auth={auth}>
-            <div className="flex flex-col items-center mt-4 h-screen">
+            <div className="flex flex-col items-center mt-4">
                 <h2 className="font-bold inline-block mb-4">DEFAULT WEEK</h2>
                 <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-4">
-                    {defaultDays.map((day) => {
+                    {defaultDays.map((defaultDay) => {
                         return (
                             <AddDay
-                                key={day.id}
+                                key={defaultDay.id}
                                 restaurant={restaurant}
-                                dayy={day}
+                                defaultDay={defaultDay}
                                 editable={true}
                             />
                         );

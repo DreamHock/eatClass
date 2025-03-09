@@ -2,8 +2,8 @@ import { router } from "@inertiajs/react";
 import { usePage } from "@inertiajs/react";
 import { useState, useEffect } from "react";
 
-const EditableDay = ({ dayy, errors, serv }) => {
-    const [day, setDay] = useState(dayy);
+const EditableDay = ({ defaultDay, errors, serv }) => {
+    const [day, setDay] = useState(defaultDay);
     const [services, setServices] = useState(
         serv.map((s) => {
             return { id: s.id, service: s.service };
