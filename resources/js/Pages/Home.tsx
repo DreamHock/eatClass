@@ -117,7 +117,11 @@ const Home = (props) => {
     });
 
     return (
-        <Layout showSearch={true} categories={props.categories}>
+        <Layout
+            showSearch={true}
+            categories={props.categories}
+            auth={props.auth}
+        >
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 {/* Hero Section - Simplified without search */}
                 <div className="mb-8 sm:mb-12 text-center">

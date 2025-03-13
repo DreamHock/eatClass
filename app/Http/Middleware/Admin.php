@@ -4,7 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Http\Response;
 
 class Admin
 {
@@ -19,6 +19,6 @@ class Admin
             return $next($request);
         }
 
-        return redirect().route('admin.login');
+        return abort(403);
     }
 }

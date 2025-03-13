@@ -32,7 +32,7 @@ export default function Login({ status, canResetPassword }) {
     const submit = (e) => {
         e.preventDefault();
 
-        post(route("admin.login"));
+        post(route("login"));
     };
 
     return (
@@ -101,14 +101,17 @@ export default function Login({ status, canResetPassword }) {
                             Forgot your password?
                         </Link>
                     )}
-                    <div className='flex items-center justify-end '>
-                        {/* <Link
+                    <div className="flex items-center justify-end ">
+                        <Link
                             href={route("register")}
                             className="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                         >
                             Don't have an account?
-                        </Link> */}
-                        <PrimaryButton className="ml-4 w-32" disabled={processing}>
+                        </Link>
+                        <PrimaryButton
+                            className="ml-4 w-32"
+                            disabled={processing}
+                        >
                             Log in
                         </PrimaryButton>
                     </div>

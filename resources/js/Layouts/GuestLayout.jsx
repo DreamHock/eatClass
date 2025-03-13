@@ -4,8 +4,8 @@ export default function Guest({ children }) {
     return (
         <div className="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-slate-100">
             <Link
-                href={route("restaurants.index")}
-                active={route().current("restaurants.index").toString()}
+                href={route("category.index")}
+                active={route().current("category.index").toString()}
                 className="relative bottom-[7px]"
             >
                 <div>

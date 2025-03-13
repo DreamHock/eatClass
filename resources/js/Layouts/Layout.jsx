@@ -1,25 +1,38 @@
 import { Link } from "@inertiajs/react";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import {
     AiOutlineSearch,
     AiOutlineFilter,
     AiOutlineHeart,
     AiOutlineUser,
+    AiOutlineLogout,
 } from "react-icons/ai";
 import { BiRestaurant } from "react-icons/bi";
 
-const Layout = ({ children, showSearch = false, categories = [] }) => {
+// Add these imports for the dropdown components
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "@/Components/ui/dropdown-menu";
+import { ChevronDown, ChevronUp } from "lucide-react";
+
+const Layout = ({ children, showSearch = false, categories = [], auth }) => {
     const [showFilters, setShowFilters] = useState(true);
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedCategory, setSelectedCategory] = useState("");
-    // Add state for rating filter
     const [selectedRating, setSelectedRating] = useState("");
-                        
+    const [dropdownOpen, setDropdownOpen] = useState(false);
+
     // Add rating filter handler
     const handleRatingChange = (e) => {
         const rating = e.target.value;
         setSelectedRating(rating);
-        window.dispatchEvent(new CustomEvent("ratingFilter", { detail: rating }));
+        window.dispatchEvent(
+            new CustomEvent("ratingFilter", { detail: rating })
+        );
     };
 
     // Add category filter handler
@@ -90,14 +103,51 @@ const Layout = ({ children, showSearch = false, categories = [] }) => {
                             href="/favorites"
                             className="text-gray-600 hover:text-yellow-500"
                         >
-                            <AiOutlineHeart className="text-xl" />
+                            <div className="flex items-center gap-1">
+                                <AiOutlineHeart className="text-xl" />
+                                <span className="hidden md:inline">
+                                    Favorites
+                                </span>
+                            </div>
                         </Link>
-                        <Link
-                            href="/profile"
-                            className="text-gray-600 hover:text-yellow-500"
-                        >
-                            <AiOutlineUser className="text-xl" />
-                        </Link>
+
+                        {auth?.user ? (
+                            <DropdownMenu onOpenChange={setDropdownOpen}>
+                                <DropdownMenuTrigger className="text-gray-600 hover:text-yellow-500 flex items-center gap-1 focus:outline-none">
+                                    <AiOutlineUser className="text-xl" />
+                                    <span className="hidden md:inline text-sm">
+                                        {auth.user.name}
+                                    </span>
+                                    {dropdownOpen ? (
+                                        <ChevronUp className="h-4 w-4" />
+                                    ) : (
+                                        <ChevronDown className="h-4 w-4" />
+                                    )}
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent
+                                    align="end"
+                                    className="w-48"
+                                >
+                                    <DropdownMenuItem asChild>
+                                        <Link
+                                            href={route("logout")}
+                                            method="post"
+                                            as="button"
+                                            className="w-full text-left hover:cursor-pointer"
+                                        >
+                                            Logout
+                                        </Link>
+                                    </DropdownMenuItem>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+                        ) : (
+                            <Link
+                                href={route("login")}
+                                className="text-gray-600 hover:text-yellow-500"
+                            >
+                                <AiOutlineUser className="text-xl" />
+                            </Link>
+                        )}
                     </div>
                 </div>
             </nav>
@@ -134,7 +184,7 @@ const Layout = ({ children, showSearch = false, categories = [] }) => {
                                 </option>
                             ))}
                         </select>
-                        <select 
+                        <select
                             className="px-3 py-2 border rounded-lg focus:outline-none focus:border-yellow-500"
                             value={selectedRating}
                             onChange={handleRatingChange}

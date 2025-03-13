@@ -17,6 +17,12 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('harakat.dev123'),
             'role' => 'admin'
         ]);
+        User::factory(1)->create([
+            'name' => 'yahya',
+            'email' => 'yahya@gmail.com',
+            'password' => Hash::make('yahya123'),
+            'role' => 'client'
+        ]);
 
         // Run other seeders
         $this->call([
